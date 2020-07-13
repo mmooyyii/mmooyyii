@@ -1,0 +1,22 @@
+site_name: d
+theme:
+  name: readthedocs
+  highlightjs: true
+  nav_style: dark
+nav:
+  - 主页: index.md
+  - erlang:
+      - erlang的启动参数: erlang/start_args.md
+      - 在远程节点上使用recon_trace: erlang/recon_trace.md
+      - BeamBook翻译:
+          - Part I:ERTS: erlang/beambook/ERTS_1.md
+  - go:
+      - 单元测试与Mock: go/unittest_and_mock.md
+  - 算法/数据结构:
+      - 日期与时间戳: algorithm/timestamp.md
+      - 麻将向听数计算: mahjong/向听数.md
+      - crit bit tree: data_structure/crit_bit_tree.md
+  - 数据库:
+      - OSX上安装postgreSQL插件: database/postgresql_plugin.md
+      - 推荐列表设计: database/tiplist.md
+      - 数据库中的🌲: database/tree.md
