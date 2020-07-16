@@ -29,6 +29,9 @@ self代表本节点，parent是本节点向上distance代的节点
     +------+--------+----------+
 
 ```sql
+// 导入数据
+INSERT INTO tree VALUES ( 1,1,0 ),( 2,2,0 ),( 3,3,0 ),( 4,4,0 ),( 2,1,1 ),( 3,1,2 ),( 3,2,1 ),( 4,1,2 ),( 4,2,1 );
+
 查询节点1所有子节点
 SELECT self FROM tree WHERE parent = 1 AND self != 1;
 
@@ -45,6 +48,8 @@ INSERT INTO tree(self,parent,distance) SELECT self, 5 ,distance + 1 FROM tree WH
 COMMIT;
 
 // 删除节点2
+DELETE FROM tree;
+INSERT INTO tree VALUES ( 1,1,0 ),( 2,2,0 ),( 3,3,0 ),( 4,4,0 ),( 2,1,1 ),( 3,1,2 ),( 3,2,1 ),( 4,1,2 ),( 4,2,1 );
 BEGIN;
 UPDATE tree SET distance = distance - 1 FROM
 (SELECT self,distance AS dist FROM tree WHERE parent = 2) AS t2 
