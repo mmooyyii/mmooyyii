@@ -71,7 +71,7 @@ Execution Time: 2190.426 ms
 查询用户123已经看过的视频数量乘以一个系数代码其中视频在高比重视频中的比例，本例中为0.9,实际中该系数可通过分析用户习惯得到
 select (hll_cardinality(history) * 0.9 ):: int from app_user where uid = 123; 
 得 88844
-explain analyse select min(weight),max(weight) from (select weight from video limit 30 offset 69101) as t;
+explain analyse select min(weight),max(weight) from (select weight from video limit 30 offset 88844) as t;
 Aggregate  (cost=1369.59..1369.60 rows=1 width=16) (actual time=20.941..20.941 rows=1 loops=1)
   ->  Limit  (cost=1368.68..1369.14 rows=30 width=8) (actual time=20.926..20.932 rows=30 loops=1)
         ->  Seq Scan on video  (cost=0.00..308109.00 rows=20000000 width=8) (actual time=0.021..15.178 rows=88874 loops=1)
