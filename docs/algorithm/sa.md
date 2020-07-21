@@ -9,9 +9,10 @@
 为确保退火算分确实有效，设置对照算法，如下：（百度上的算法大多比这个粗暴的对照算法差）
 ```python
 import random
-min_x,min_y = -100, 100
+left,right = -100, 100
+min_x,min_y = 9999,9999
 for _ in range(10000):
-    x = -10 + random.random() * 20
+    x = left + random.random() * (right - left)
     y = x * x - 2 * x + 3
     if min_y > y:
         min_x,min_y = x, y
@@ -34,8 +35,11 @@ def next_x(x_old, good_step, direct):
         return x_old - random.random() * ((right - left) / 1000) * 0.9 ** min(10, good_step)
 
 
-def fun(x):
+def fun1(x):
     return x * x - 2 * x + 3
+
+def fun2(x):
+    return (x * x - 5 * x) * math.sin(x*x)
 
 
 left, right = -100, 100
@@ -43,7 +47,7 @@ temperature = 100000
 alpha = 0.98
 
 x = random.randint(left, right)  # 随机的初始位置
-y = fun(x)
+y = fun1(x)
 direct = random.randint(0, 1)  # 选择x递增或递减
 best_x = 9999
 best_y = 9999
@@ -58,7 +62,7 @@ while epoch < 100:  # 终止条件，循环100代
         epoch += 1
         direct = random.randint(0, 1)
     else:
-        dy = fun(x) - y
+        dy = fun1(x) - y
         y += dy
         if dy < 0:
             good_step += 1
