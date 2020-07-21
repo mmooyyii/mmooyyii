@@ -120,4 +120,4 @@ Limit  (cost=156.68..156.71 rows=12 width=12) (actual time=0.617..0.617 rows=0 l
 Planning Time: 0.248 ms
 Execution Time: 0.645 ms
 ```
-Join Filter显著下降，性能约提高了30倍，且精度也没有损失，如果使用能使Join Filter变得更小的系数，查询效率会更快。
+Join Filter显著下降，性能约提高了30倍，如果使用能使Join Filter变得更小的系数，查询效率会更快。
