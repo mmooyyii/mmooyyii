@@ -9,7 +9,7 @@
 为确保退火算分确实有效，设置对照算法，如下：（百度上的算法大多比这个粗暴的对照算法差）
 ```python
 import random
-min_x,min_y = -10, 10
+min_x,min_y = -100, 100
 for _ in range(10000):
     x = -10 + random.random() * 20
     y = x * x - 2 * x + 3
