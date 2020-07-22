@@ -1,4 +1,3 @@
-😊
   - erlang:
       - [在远程节点上使用recon_trace](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/recon_trace.md)
       - BeamBook翻译:
@@ -15,3 +14,4 @@
       - [推荐列表设计1](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/tiplist1.md)
       - [推荐列表设计2](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/tiplist2.md)
       - [数据库中的🌲](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/tree.md)
+      - [PostgreSql插件开发1](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/pg_plugin_1.md)
