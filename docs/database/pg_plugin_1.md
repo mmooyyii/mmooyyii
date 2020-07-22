@@ -5,7 +5,7 @@
 1. 给要开发的插件起一个名字
 hello_world
 2. 创建3个文件
-    
+
 hello_world.control
 ```
 //文件名的组成格式**必须**是「插件名」.control
@@ -14,7 +14,7 @@ default_version = '0.0.1' // 默认版本，这里选择0.0.1
 relocatable = true
 ```
 [relocatable参数见postgresql文档35.17.3](https://www.postgresql.org/docs/12/extend-extensions.html#EXTEND-EXTENSIONS-RELOCATION)
-        
+
 hello_world--0.0.1.sql
 ```
 //文件名的组成格式**必须**是「插件名」--「版本号」.sql
