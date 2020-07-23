@@ -76,4 +76,4 @@ yimo=# \dx
 (7 rows)
 ```
 
-本文中的所有代码可以在[这里](https://github.com/mmooyyii/pg_plugin_demo/tree/master/helloworld)找到。
+本文中的所有代码可以在[这里](https://github.com/mmooyyii/pg_plugin_demo/tree/master/hello_world)找到。

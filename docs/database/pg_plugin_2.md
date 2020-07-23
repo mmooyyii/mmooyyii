@@ -33,20 +33,14 @@ yimo=# select * from test;
 
 创建扩展类型
 ```
-CREATE TYPE name (
-    INPUT = input_function,
-    OUTPUT = output_function
-    [ , RECEIVE = receive_function ]
-    [ , SEND = send_function ]
-    [ , ANALYZE = analyze_function ]
-    [ , INTERNALLENGTH = { internallength | VARIABLE } ]
-    [ , PASSEDBYVALUE ]
-    [ , ALIGNMENT = alignment ]
-    [ , STORAGE = storage ]
-    [ , DEFAULT = default ]
-    [ , ELEMENT = element ]
-    [ , DELIMITER = delimiter ]
-)
+CREATE TYPE hex (
+  INTERNALLENGTH = internallength,
+  INPUT = hex_in,
+  OUTPUT = hex_out,
+  receive = hex_recv,
+  send = hex_send,
+  STORAGE = default
+);
 ```
 
 INPUT && OUTPUT 外部文本形式与内部格式之间的转换
@@ -65,7 +59,7 @@ INTERNALLENGTH && STORAGE 数据的长度与储存方式
 对于gin，gist索引
 
 
-本文中的所有代码可以在[这里](https://github.com/mmooyyii/pg_plugin_demo/tree/master/helloworld)找到。  
+本文中的所有代码可以在[这里](https://github.com/mmooyyii/pg_plugin_demo/tree/master/hello_world)找到。  
 参考代码：[HyperLogLog](https://github.com/citusdata/postgresql-hll)  [RoaringBitMap](https://github.com/ChenHuajun/pg_roaringbitmap)
 
 
