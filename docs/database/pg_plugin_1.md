@@ -1,4 +1,4 @@
-#### PostgreSql插件开发-1 hello,world!
+#### PostgreSQL插件开发-1 hello,world!
 
 只需要简单的几步，就能完成一个简单的pg插件
 

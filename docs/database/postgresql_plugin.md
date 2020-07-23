@@ -1,4 +1,4 @@
-OSX上部分PostgreSql的插件不能用brew直接安装，大致安装流程在这里记录一下（以hll为例）
+OSX上部分PostgreSQL的插件不能用brew直接安装，大致安装流程在这里记录一下（以hll为例）
 
 * https://github.com/citusdata/postgresql-hll 的release中下载源码
 * make中报错，找不到stdio.h

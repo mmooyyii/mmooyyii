@@ -1,4 +1,4 @@
-#### PostgreSql插件开发-6 冒泡排序
+#### PostgreSQL插件开发-6 冒泡排序
 
 ```
 create table bb(a int);

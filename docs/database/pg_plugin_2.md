@@ -1,9 +1,9 @@
-#### PostgreSql插件开发-2 拓展类型
+#### PostgreSQL插件开发-2 拓展类型
 对于一些16进制的编号，如A10302BB，在存储时的理想情况是存为2701329083，占用4个字节，但是这样的话可读性就下降了，
 如果存成varchar(8)又占用了较多的空间。
 理想情况是像inet类型一样,两者兼得。
 ```
-yimo=# create table test(a inet,b text);
+yimo=# create table test(a inet, b text);
 CREATE TABLE
 yimo=# insert into test values ('192.168.31.24'::inet,'192.168.31.24');
 INSERT 0 1
@@ -34,7 +34,7 @@ yimo=# select * from test;
 创建扩展类型
 ```
 CREATE TYPE hex (
-  INTERNALLENGTH = internallength,
+  INTERNALLENGTH = VARIABLE,
   INPUT = hex_in,
   OUTPUT = hex_out,
   receive = hex_recv,
