@@ -6,7 +6,6 @@
       - [代码结构与gomock的使用](https://github.com/mmooyyii/mmooyyii/blob/master/docs/go/gomock.md)
   - 算法/数据结构:
       - [日期与时间戳](https://github.com/mmooyyii/mmooyyii/blob/master/docs/algorithm/timestamp.md)
-      - [麻将向听数计算-未完成](https://github.com/mmooyyii/mmooyyii/blob/master/docs/mahjong/向听数.md)
       - [crit bit tree-未完成](https://github.com/mmooyyii/mmooyyii/blob/master/docs/data_structure/crit_bit_tree.md)
       - [退火算法](https://github.com/mmooyyii/mmooyyii/blob/master/docs/algorithm/sa.md)
   - 数据库:
