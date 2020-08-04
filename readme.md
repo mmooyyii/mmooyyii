@@ -1,6 +1,7 @@
   - erlang:
       - [在远程节点上使用recon_trace](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/recon_trace.md)
       - [🙏平安经🙏](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/平安经.md)
+      - [模式匹配的时间复杂度](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/match_spec.md)
       - BeamBook翻译:
           - [Part I:ERTS](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/beambook/ERTS_1.md)
   - go:

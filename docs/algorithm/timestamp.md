@@ -15,8 +15,7 @@ date_to_ts2(DateTime) ->
     calendar:datetime_to_gregorian_seconds(DateTime) - 62167219200.
 
 t1() ->
-    timer:tc(fun() ->
-        lists:foreach(fun(_) -> date_to_ts1({{2020, 10, 10}, {10, 10, 10}}) end, lists:seq(1, 5000000)) end).
+    timer:tc(fun() ->lists:foreach(fun(_) -> date_to_ts1({{2020, 10, 10}, {10, 10, 10}}) end, lists:seq(1, 5000000)) end).
 t2() ->
     timer:tc(fun() ->
         lists:foreach(fun(_) -> date_to_ts2({{2020, 10, 10}, {10, 10, 10}}) end, lists:seq(1, 5000000)) end).
