@@ -20,7 +20,7 @@ yimo=# select * from test;
 ```
 对于上述的编号，我们希望能有一种新的数据类型，用于存储16进制的数据。
 ```
-yimo=# create table test(a pg_hex(4),b text);
+yimo=# create table test(a pg_hex,b text);
 CREATE TABLE
 yimo=# insert into test values ('A10302BB'::hex,'A10302BB');
 INSERT 0 1

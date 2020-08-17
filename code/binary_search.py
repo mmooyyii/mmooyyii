@@ -26,3 +26,6 @@ def binary_search_lt(target: int, ls: list) -> int:
         else:
             right = mid
     return left
+
+
+print(binary_search_lte(50, [1, 2, 3, 4, 5, 10000000]) - 1)
