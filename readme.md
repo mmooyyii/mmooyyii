@@ -20,7 +20,9 @@
       
 <details>
 <summary>todo list</summary>
-  
+
+- [制作一个cheat engine]()
+- [switch游戏加速器]()
 - [PostgreSQL插件开发1.1](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/pg_plugin_1.1.md)
 - [crit bit tree-未完成](https://github.com/mmooyyii/mmooyyii/blob/master/docs/data_structure/crit_bit_tree.md)
 - [推荐列表设计2-未完成](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/tiplist2.md)

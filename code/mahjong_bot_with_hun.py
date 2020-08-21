@@ -1,10 +1,9 @@
 """
-基于向听数实现的简易麻将bot 参考文章 https://zhuanlan.zhihu.com/p/31000381
-1. 为了代码易读性考虑，代码的重复计算非常多
-2. 本demo中每次打出打出后向听数最小的牌，具体牌的价值计算有很大的优化空间
-3. 听牌后等待胡牌即可，不做过多处理了。
-4. 对于混牌，设混牌与如何牌的距离都是无限大，计算出向听数后减去混牌数量即可
-5. 对于限制牌型如三色，开门等需要写代码调整牌的价值。
+带混牌的麻将向听数判断和bot
+混牌：就是万能牌，能当作任意牌使用,
+本例中，用一张额外的牌作为混牌。
+混牌与任意牌的距离都是无限大。
+一张混牌能使向听数 - 1
 """
 
 import random
@@ -14,17 +13,19 @@ from collections import Counter
 条 = list(range(31, 40))
 筒 = list(range(51, 60))
 字 = list(range(70, 140, 10))
+混 = [1234, 1244, 1254, 1264]
 
 中文牌 = {
     1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六', 7: '七', 8: '八', 9: '九',
-    70: '东', 80: '南', 90: '西', 100: '北', 110: '中', 120: '发', 130: '白'
+    70: '东', 80: '南', 90: '西', 100: '北', 110: '中', 120: '发', 130: '白',
+    1234: '混', 1244: '混', 1254: '混', 1264: '混'
 }
 
 
 class Pai:
 
     def __init__(self):
-        self.pais = (万 + 条 + 筒 + 字) * 4
+        self.pais = (万 + 条 + 筒 + 字) * 4 + 混
         random.shuffle(self.pais)
         self.index = 0
 
@@ -40,6 +41,7 @@ class Pai:
 def ting(pai):
     pai.append(999)  # 原算法只适用于 2，5，8，11，14张牌的情况，加一张无用牌适配成能检测13张牌的情况
     return _ting(pai)
+
 
 def _ting(pai: list, K=0, P=0, G=0, g=0, step=0):  # 13张
     count = Counter(pai)
@@ -82,10 +84,11 @@ def _ting(pai: list, K=0, P=0, G=0, g=0, step=0):  # 13张
         else:
             return _ting(pai, K, P, G, g, step + 1)
     elif step == 4:  # 计算S值
-        if g == 2 and P == 0:
-            return 2 * (K - G) - g - P + 1
+        hun = get_hun_number(count)
+        if g == 2 + hun and P == 0:
+            return 2 * (K - G) - g - P + 1 - hun
         else:
-            return 2 * (K - G) - g - P
+            return 2 * (K - G) - g - P - hun
 
 
 def get_shun(count):
@@ -112,6 +115,13 @@ def get_half_ke(count):
     for k, v in count.items():
         if v >= 2:
             return [k, k]
+
+
+def get_hun_number(count):
+    ret = 0
+    for p in 混:
+        ret += count.setdefault(p, 0)
+    return ret
 
 
 def bot_play(pai):

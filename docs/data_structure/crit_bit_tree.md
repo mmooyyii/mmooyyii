@@ -1,4 +1,1 @@
-
-
-
 [参考](https://www.imperialviolet.org/binary/critbit.pdf)
