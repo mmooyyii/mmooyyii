@@ -34,12 +34,15 @@ class Pai:
 
     def 摸(self):
         self.index += 1
+        print(f"摸到 {to_chinese(self.pais[self.index])} ")
         return self.pais[self.index]
 
 
 def ting(pai):
-    pai.append(999)  # 原算法只适用于 2，5，8，11，14张牌的情况，加一张无用牌适配成能检测13张牌的情况
+    if len(pai) in (1, 4, 7, 10, 13):
+        pai.append(999)  # 原算法只适用于 2，5，8，11，14张牌的情况，加一张无用牌适配成能检测13张牌的情况
     return _ting(pai)
+
 
 def _ting(pai: list, K=0, P=0, G=0, g=0, step=0):  # 13张
     count = Counter(pai)
@@ -82,9 +85,10 @@ def _ting(pai: list, K=0, P=0, G=0, g=0, step=0):  # 13张
         else:
             return _ting(pai, K, P, G, g, step + 1)
     elif step == 4:  # 计算S值
-        if g == 2 and P == 0:
+        if P == 0 and g == 2:
             return 2 * (K - G) - g - P + 1
         else:
+            g = min(K - G, g)
             return 2 * (K - G) - g - P
 
 
@@ -132,6 +136,7 @@ def bot_play(pai):
         pp.remove(play)
         print(f"听牌！{list(map(to_chinese, pp))}")
         return None
+    print(f"打出 {to_chinese(play)} ")
     return play
 
 
@@ -146,7 +151,7 @@ def to_chinese(pai):
         return f"{中文牌[pai]}"
 
 
-if __name__ == '__main__':
+def run():
     p = Pai()
     pai = p.发牌()
     xun = 0
@@ -155,10 +160,19 @@ if __name__ == '__main__':
         m = p.摸()
         print(f'牌: {list(map(to_chinese, pai))} ')
         pai.append(m)
-        print(f"摸到 {to_chinese(m)} ")
         play = bot_play(pai)
         if not play:
             print(f"{xun}巡听牌")
-            exit(0)
-        print(f"打出 {to_chinese(play)} ")
+            break
         pai.remove(play)
+
+
+if __name__ == '__main__':
+    for i in range(1000):
+        try:
+            p = to_chinese(i)
+            print(f"to_chinese({i})-> '{p}';")
+        except:
+            pass
+
+    # print(ting([11, 12, 13, 14, 15]))

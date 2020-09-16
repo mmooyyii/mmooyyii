@@ -10,6 +10,7 @@
       - [日期与时间戳](https://github.com/mmooyyii/mmooyyii/blob/master/docs/algorithm/timestamp.md)
       - [退火算法](https://github.com/mmooyyii/mmooyyii/blob/master/docs/algorithm/sa.md)
       - [麻将向听数与简易bot](https://github.com/mmooyyii/mmooyyii/blob/master/docs/mahjong/向听数.md)
+      - [利用泰勒展开式写配置文件](https://github.com/mmooyyii/mmooyyii/blob/master/docs/algorithm/taylor.md)
   - 数据库:
       - [OSX上安装PostgreSQL插件](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/postgresql_plugin.md)
       - [推荐列表设计1](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/tiplist1.md)
