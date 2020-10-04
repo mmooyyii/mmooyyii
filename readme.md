@@ -6,6 +6,7 @@
           - [Part I:ERTS](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/beambook/ERTS_1.md)
   - go:
       - [代码结构与gomock的使用](https://github.com/mmooyyii/mmooyyii/blob/master/docs/go/gomock.md)
+      - [国庆看minio代码](https://github.com/mmooyyii/mmooyyii/blob/master/docs/go/minio.md)
   - 算法/数据结构:
       - [日期与时间戳](https://github.com/mmooyyii/mmooyyii/blob/master/docs/algorithm/timestamp.md)
       - [退火算法](https://github.com/mmooyyii/mmooyyii/blob/master/docs/algorithm/sa.md)
