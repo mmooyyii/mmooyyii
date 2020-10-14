@@ -2,6 +2,7 @@
       - [在远程节点上使用recon_trace](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/recon_trace.md)
       - [🙏平安经🙏](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/平安经.md)
       - [模式匹配的时间复杂度](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/match_spec.md)
+      - [type/1](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/type.md)
       - BeamBook翻译:
           - [Part I:ERTS](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/beambook/ERTS_1.md)
   - go:
@@ -12,6 +13,7 @@
       - [退火算法](https://github.com/mmooyyii/mmooyyii/blob/master/docs/algorithm/sa.md)
       - [麻将向听数与简易bot](https://github.com/mmooyyii/mmooyyii/blob/master/docs/mahjong/向听数.md)
       - [利用泰勒展开式写配置文件](https://github.com/mmooyyii/mmooyyii/blob/master/docs/algorithm/taylor.md)
+      - [R🌲](https://github.com/mmooyyii/mmooyyii/blob/master/docs/data_structure/rtree.md)
   - 数据库:
       - [OSX上安装PostgreSQL插件](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/postgresql_plugin.md)
       - [推荐列表设计1](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/tiplist1.md)
