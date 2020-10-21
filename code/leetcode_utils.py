@@ -3,7 +3,6 @@
 """
 
 
-# 二分查找
 def binary_search_lte(target: int, ls: list) -> int:
     # 返回小于等于target的个数
     left, right = 0, len(ls)
@@ -16,7 +15,6 @@ def binary_search_lte(target: int, ls: list) -> int:
     return left
 
 
-# 二分查找
 def binary_search_lt(target: int, ls: list) -> int:
     # 返回小于target的个数
     left, right = 0, len(ls)
@@ -30,6 +28,7 @@ def binary_search_lt(target: int, ls: list) -> int:
 
 
 # B个里挑A个，不管顺序有几种情况
+# 备注：递推公式：c(a,b) = c(a-1,b-1) + c(a,b-1)
 def c(a, b):
     b = min(b, a - b)
     d, m = 1, 1
@@ -102,4 +101,88 @@ def floyd(n, g: dict):
     return ret
 
 
+def karp_rabin(pre_hash, string):
+    for char in string:
+        pre_hash *= 27
+        pre_hash += ord(char) - ord('a') + 1
+        pre_hash %= 100_000_0007
+    return pre_hash
 
+
+# python 的 str() in str() 也是O(n)
+def boyer_moore(pattern, text):
+    bad_skip = {}
+    good_skip = 0
+    for i, v in enumerate(pattern):
+        bad_skip[v] = i
+    while True:
+        if pattern[good_skip] == pattern[-good_skip - 1]:
+            good_skip += 1
+        else:
+            break
+    index = 0
+    while index + len(pattern) <= len(text):
+        search = len(pattern)
+        while True:
+            search -= 1
+            if pattern[search] != text[index + search]:
+                suffix_length = len(pattern) - 1 - search
+                if text[index + search] in bad_skip:
+                    bad = len(pattern) - bad_skip[text[index + search]] - 1
+                else:
+                    bad = len(pattern) - suffix_length
+                if 0 < suffix_length <= good_skip:
+                    good = len(pattern) - suffix_length
+                elif suffix_length > good_skip:
+                    good = len(pattern) - good_skip
+                else:
+                    good = 0
+                break
+            if search == 0:
+                return True
+        index += max(bad, good)
+    return False
+
+
+def prime(n):
+    memo = [1 for _ in range(n)]
+    ret = []
+    for i in range(2, n):
+        if memo[i]:
+            ret.append(i)
+        j = 0
+        while j < len(ret) and i * ret[j] < n:
+            memo[i * ret[j]] = False
+            if i % ret[j] == 0:
+                break
+            j += 1
+    return ret
+
+
+class UnionFind:
+    def __init__(self, n):
+        self.uf = [-1 for _ in range(n)]
+        self.count_ = n
+
+    def find(self, x):
+        r = x
+        while self.uf[x] >= 0:
+            x = self.uf[x]
+        while r != x:
+            self.uf[r], r = x, self.uf[r]
+        return x
+
+    def union(self, x, y):
+        ux, uy = self.find(x), self.find(y)
+        if ux == uy:
+            return
+        if self.uf[ux] < self.uf[uy]:
+            self.uf[ux] += self.uf[uy]
+            self.uf[uy] = ux
+        else:
+            self.uf[uy] += self.uf[ux]
+            self.uf[ux] = uy
+        self.count_ -= 1
+
+    def count(self):
+        return self.count_

@@ -1,6 +1,5 @@
   - erlang:
       - [在远程节点上使用recon_trace](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/recon_trace.md)
-      - [🙏平安经🙏](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/平安经.md)
       - [模式匹配的时间复杂度](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/match_spec.md)
       - [type/1](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/type.md)
       - BeamBook翻译:
@@ -13,18 +12,25 @@
       - [退火算法](https://github.com/mmooyyii/mmooyyii/blob/master/docs/algorithm/sa.md)
       - [麻将向听数与简易bot](https://github.com/mmooyyii/mmooyyii/blob/master/docs/mahjong/向听数.md)
       - [利用泰勒展开式写配置文件](https://github.com/mmooyyii/mmooyyii/blob/master/docs/algorithm/taylor.md)
-      - [R🌲](https://github.com/mmooyyii/mmooyyii/blob/master/docs/data_structure/rtree.md)
+      - [IDEA的ctrl+F](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/inverted_index.md)
+      - [LeetCode常用函数](https://github.com/mmooyyii/mmooyyii/blob/master/code/leetcode_utils.py)
+  - 操作系统/网络
+      - [对长连接服务热更新](https://github.com/mmooyyii/mmooyyii/blob/master/docs/os/hot_update_with_socket.md)
   - 数据库:
       - [OSX上安装PostgreSQL插件](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/postgresql_plugin.md)
       - [推荐列表设计1](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/tiplist1.md)
       - [数据库中的🌲](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/tree.md)
       - [PostgreSQL插件开发1](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/pg_plugin_1.md)
       - [PostgreSQL插件开发2](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/pg_plugin_2.md)
-
+  - 请有感情地朗读并背诵全文:
+      - [redis](https://github.com/mmooyyii/mmooyyii/blob/master/docs/八股文/redis.md)
       
+      
+
 <details>
 <summary>todo list</summary>
 
+- [R🌲](https://github.com/mmooyyii/mmooyyii/blob/master/docs/data_structure/rtree.md)
 - [制作一个cheat engine]()
 - [switch游戏加速器]()
 - [PostgreSQL插件开发1.1](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/pg_plugin_1.1.md)
