@@ -2,6 +2,8 @@
 记录一些LeetCode常常会用的的函数与数据结构
 """
 
+import random
+
 
 def binary_search_lte(target: int, ls: list) -> int:
     # 返回小于等于target的个数
@@ -46,6 +48,11 @@ def factorial(n):
     return ret
 
 
+# 等比数列求和,q为整数
+def sum_a(a1, length, q):
+    return int(a1 * (1 - q ** length) / (1 - q))
+
+
 class Trie:
 
     def __init__(self):
@@ -62,6 +69,102 @@ class Trie:
         for i in word:
             node = node.setdefault(i, {})
         return node.setdefault('is_word', False)
+
+
+class SkipListNode:
+
+    def __init__(self, k=float('-inf')):
+        self.k = k
+        self.next = None
+        self.down = None
+
+
+class SkipList:
+
+    def __init__(self):
+        self.high = 1
+        self.root = SkipListNode()
+        self.kv = {}
+
+    def add(self, k, v):
+        if k in self.kv:
+            self.kv[k] = v
+            return
+        d = self.depth()
+        if d > self.high:
+            self._extend_layer(d)
+        node = self.root
+        pre_new_node = None
+        for depth in range(self.high, 0, -1):
+            node = self.search_in_layer(node, k)
+            if d >= depth:
+                new_node = SkipListNode(k)
+                new_node.next = node.next
+                node.next = new_node
+                if pre_new_node:
+                    pre_new_node.down = new_node
+                pre_new_node = new_node
+            node = node.down
+        self.kv[k] = v
+
+    @staticmethod
+    def search_in_layer(node, k):
+        while node.next:
+            if node.k <= k <= node.next.k:
+                return node
+            else:
+                node = node.next
+        return node
+
+    def _extend_layer(self, d):
+        root = self.root
+        new_root = None
+        pre_layer_head = None
+        for _ in range(d - self.high):
+            layer_head = SkipListNode()
+            if not new_root:
+                new_root = layer_head
+            if pre_layer_head:
+                pre_layer_head.down = layer_head
+            pre_layer_head = layer_head
+        if pre_layer_head:
+            pre_layer_head.down = root
+        if new_root:
+            self.root = new_root
+        self.high = max(self.high, d)
+
+    def remove(self, k):
+        if k in self:
+            self.kv.pop(k)
+
+    def __contains__(self, k):
+        return k in self.kv
+
+    def range(self, left, right):
+        pass
+
+    @staticmethod
+    def depth():
+        d = 1
+        while True:
+            if random.random() > 0.5:
+                return d
+            else:
+                d += 1
+
+    def show(self):
+        head = self.root
+        while head:
+            node = head.next
+            head = head.down
+            print("Layer: ", end='')
+            while node:
+                if node.next:
+                    print((node.k, self.kv[node.k]), end=' -> ')
+                else:
+                    print((node.k, self.kv[node.k]), end='')
+                node = node.next
+            print()
 
 
 class SegmentTree:
@@ -99,6 +202,19 @@ def floyd(n, g: dict):
                 if ret[i][j] > ret[i][k] + ret[k][j]:
                     ret[i][j] = ret[i][k] + ret[k][j]
     return ret
+
+
+def dijkstra(start, end, g):
+    import heapq
+    heap = [(0, start)]
+    while heap:
+        dist, node = heapq.heappop(heap)
+        for n, weight in g[node].items():
+            if n == end:
+                return dist + weight
+            else:
+                heapq.heappush(heap, (dist + weight, n))
+    return -1
 
 
 def karp_rabin(pre_hash, string):

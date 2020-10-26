@@ -8,6 +8,7 @@ minioClient = Minio('127.0.0.1:9000',
                     secret_key='minioadmin',
                     secure=False)
 
+minioClient.get_bucket_encryption()
 # Make a bucket with the make_bucket API call.
 try:
     minioClient.make_bucket("maylogs", location="us-east-1")
