@@ -12,10 +12,11 @@
       - [退火算法](https://github.com/mmooyyii/mmooyyii/blob/master/docs/algorithm/sa.md)
       - [麻将向听数与简易bot](https://github.com/mmooyyii/mmooyyii/blob/master/docs/mahjong/向听数.md)
       - [利用泰勒展开式写配置文件](https://github.com/mmooyyii/mmooyyii/blob/master/docs/algorithm/taylor.md)
-      - [IDEA的ctrl+F](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/inverted_index.md)
       - [LeetCode常用函数](https://github.com/mmooyyii/mmooyyii/blob/master/code/leetcode_utils.py)
-  - 操作系统/网络
+  - 操作系统/网络:
       - [对长连接服务热更新](https://github.com/mmooyyii/mmooyyii/blob/master/docs/os/hot_update_with_socket.md)
+  - 运维:
+      - [k8s的kafka部署](https://github.com/mmooyyii/mmooyyii/blob/master/code/kafka.yml)
   - 数据库:
       - [OSX上安装PostgreSQL插件](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/postgresql_plugin.md)
       - [推荐列表设计1](https://github.com/mmooyyii/mmooyyii/blob/master/docs/database/tiplist1.md)

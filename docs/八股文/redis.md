@@ -16,7 +16,7 @@
 - STR/LIST/HASH/SET/ZSET 底层都是使用什么数据结构实现的？
 - ZSET 什么时候使用 Ziplist 实现，什么时候使用 Skiplist 实现？
 - ZSET 为什么不用 BST/AVL/B-Tree/红黑树，而使用跳表？
-- Redis 的过期键删除策略是什么？
+- Redis 的过期键删除策略是什么？                            
 - Redis 的主从服务器是如何同步过期键的？
 - AOF 和 RDB 持久化有什么区别？
 - Redis 的主从是如何进行同步的？

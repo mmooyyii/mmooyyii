@@ -5,6 +5,20 @@
 import random
 
 
+def is_palindrome(n):
+    n = str(n)
+    for i in range(len(n) // 2):
+        if i > len(n) // 2:
+            return True
+        if n[i] != n[len(n) - 1 - i]:
+            return False
+    return True
+
+
+a = is_palindrome(1)
+print(a)
+
+
 def binary_search_lte(target: int, ls: list) -> int:
     # 返回小于等于target的个数
     left, right = 0, len(ls)
@@ -38,6 +52,13 @@ def c(a, b):
         d *= i + 1
         m *= a - i
     return m // d
+
+
+# 排列组合
+def comb(elements, n):
+    import itertools
+    for i in itertools.combinations(elements, n):
+        print(i)
 
 
 # 阶乘
@@ -77,6 +98,7 @@ class SkipListNode:
         self.k = k
         self.next = None
         self.down = None
+        self.span = 1
 
 
 class SkipList:
@@ -86,26 +108,25 @@ class SkipList:
         self.root = SkipListNode()
         self.kv = {}
 
-    def add(self, k, v):
-        if k in self.kv:
-            self.kv[k] = v
-            return
+    def add(self, score, member):
+        if member in self.kv:
+            self.remove(member)
         d = self.depth()
         if d > self.high:
             self._extend_layer(d)
         node = self.root
         pre_new_node = None
         for depth in range(self.high, 0, -1):
-            node = self.search_in_layer(node, k)
+            node = self.search_in_layer(node, score)
             if d >= depth:
-                new_node = SkipListNode(k)
+                new_node = SkipListNode(score)
                 new_node.next = node.next
                 node.next = new_node
                 if pre_new_node:
                     pre_new_node.down = new_node
                 pre_new_node = new_node
             node = node.down
-        self.kv[k] = v
+        self.kv[member] = score
 
     @staticmethod
     def search_in_layer(node, k):
@@ -137,12 +158,6 @@ class SkipList:
         if k in self:
             self.kv.pop(k)
 
-    def __contains__(self, k):
-        return k in self.kv
-
-    def range(self, left, right):
-        pass
-
     @staticmethod
     def depth():
         d = 1
@@ -160,11 +175,14 @@ class SkipList:
             print("Layer: ", end='')
             while node:
                 if node.next:
-                    print((node.k, self.kv[node.k]), end=' -> ')
+                    print(node.k, end=' -> ')
                 else:
-                    print((node.k, self.kv[node.k]), end='')
+                    print(node.k, end='')
                 node = node.next
             print()
+
+    def rank(self, n):
+        pass
 
 
 class SegmentTree:
