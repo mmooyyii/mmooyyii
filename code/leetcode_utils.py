@@ -1,8 +1,10 @@
 """
 记录一些LeetCode常常会用的的函数与数据结构
 """
-
 import random
+from sys import setrecursionlimit
+
+setrecursionlimit(9999999)
 
 
 def is_palindrome(n):
@@ -13,10 +15,6 @@ def is_palindrome(n):
         if n[i] != n[len(n) - 1 - i]:
             return False
     return True
-
-
-a = is_palindrome(1)
-print(a)
 
 
 def binary_search_lte(target: int, ls: list) -> int:
@@ -187,8 +185,53 @@ class SkipList:
 
 class SegmentTree:
 
-    def __init__(self):
-        pass
+    def __init__(self, ls, calc=lambda x, y: x + y):
+        self.data = ls
+        self.calc = calc
+        self.tree = [0 for _ in range(len(ls) * 4)]
+        for i, v in enumerate(ls):
+            self.tree[i + len(self.data)] = v
+        for i in range(len(ls) - 1, 0, -1):
+            self.tree[i] = self.calc(self.tree[i * 2], self.tree[i * 2 + 1])
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, item):
+        return self.data[item]
+
+    def __setitem__(self, key, value):
+        self.data[key] = value
+        pos = key + len(self)
+        self.tree[pos] = value
+        while pos:
+            left, right = pos, pos
+            if pos & 1:
+                left = pos - 1
+            else:
+                right = pos + 1
+            pos >>= 1
+            self.tree[pos] = self.calc(self.tree[left], self.tree[right])
+
+    def range(self, left, right):
+        # 左右都能取到
+        rt = 0
+        left += len(self)
+        right += len(self)
+        while left <= right:
+            if left & 1:
+                rt = self.calc(rt, self.tree[left])
+                left += 1
+            if not right & 1:
+                rt = self.calc(rt, self.tree[right])
+                right -= 1
+            left >>= 1
+            right >>= 1
+        return rt
+
+
+a = SegmentTree([1, 2, 3, 4, 3, 2, 1], min)
+print(a.range(1, 2))
 
 
 def init_digraph(n, edges):
