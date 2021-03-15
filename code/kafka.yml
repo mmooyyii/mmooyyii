@@ -1,5 +1,5 @@
 # 一个最简单的k8s的kafka部署配置文件，一个zookeeper，一个kafka
-# 网上的kafka部署脚本基本全部都无法在其他pod访问，全都是listen都127.0.0.1，部署来有什么用？？？？
+# 网上的kafka部署脚本基本全部都无法在其他pod访问，全都是listen的127.0.0.1，部署来有什么用？？？？
 # 通过status.podIP获取ip，然后使kafka能在pod间通信
 kind: Deployment
 apiVersion: apps/v1
