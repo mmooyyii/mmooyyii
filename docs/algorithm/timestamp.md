@@ -35,3 +35,25 @@ t2() ->
 {2021280,ok}  （使用hipe时标准库反而更慢了）
 ```
 
+时间戳转日期
+```erlang
+ts_to_date(Ts) ->
+%%  Year month day
+    Day = Ts div 86400 + 719468,
+    Era = case Day > 0 of true -> Day div 146097;false -> (Day - 146096) div 146097 end,
+    Doe = Day - Era * 146097,
+    Yoe = (Doe - Doe div 1460 + Doe div 36524 - Doe div 146069) div 365,
+    Y = Yoe + Era * 400,
+    Doy = Doe - (365 * Yoe + Yoe div 4 - Yoe div 100),
+    Mp = (5 * Doy + 2) div 153,
+    D = Doy - (154 * Mp + 2) div 5 + 1,
+    M = case Mp < 10 of
+            true -> 3 + Mp;
+            false -> -9 + Mp
+        end,
+    Date = {case M =< 2 of true -> 1 + Y;false -> Y end, M, D},
+%%    hour minute second
+    S = Ts rem 86400,
+    Time = {S div 3600, S rem 3600 div 60, S rem 60},
+    {Date, Time}.
+```
