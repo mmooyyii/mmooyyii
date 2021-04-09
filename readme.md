@@ -2,6 +2,7 @@
       - [在远程节点上使用recon_trace](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/recon_trace.md)
       - [模式匹配的时间复杂度](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/match_spec.md)
       - [type/1](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/type.md)
+      - [使用断点调试rabbitmq](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/使用断点调试rabbitmq.md)
       - BeamBook翻译:
           - [Part I:ERTS](https://github.com/mmooyyii/mmooyyii/blob/master/docs/erlang/beambook/ERTS_1.md)
   - go:
