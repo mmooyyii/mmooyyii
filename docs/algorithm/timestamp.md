@@ -1,6 +1,6 @@
 时间戳-日期快速转换
 
-在[这里](http://howardhinnant.github.io/date_algorithms.html#civil_from_days)看到一个特别牛逼的日期算法，
+在[这里](~~http://howardhinnant.github.io/date_algorithms.html#civil_from_days~~)看到一个特别牛逼的日期算法，
 应该是完爆大多数语言的标准库了。
 ```erlang
 date_to_ts1({{Y, M, D}, {H, Mm, S}}) ->

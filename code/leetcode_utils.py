@@ -1,6 +1,7 @@
 """
 记录一些LeetCode常常会用的的函数与数据结构
 """
+import math
 import random
 from sys import setrecursionlimit
 
@@ -39,6 +40,17 @@ def binary_search_lt(target: int, ls: list) -> int:
         else:
             right = mid
     return left
+
+
+def binary_closest(target, ls):
+    n = binary_search_lte(target, ls)
+    if n == len(ls):
+        return ls[-1]
+    if ls[n] == target:
+        return target
+    if abs(target - ls[n]) < abs(target - ls[n - 1]):
+        return ls[n]
+    return ls[n - 1]
 
 
 # B个里挑A个，不管顺序有几种情况
@@ -231,7 +243,6 @@ class SegmentTree:
 
 
 a = SegmentTree([1, 2, 3, 4, 3, 2, 1], min)
-print(a.range(1, 2))
 
 
 def init_digraph(n, edges):
@@ -363,3 +374,30 @@ class UnionFind:
 
     def count(self):
         return self.count_
+
+
+def bucket_sort(ls):
+    mi = min(ls)
+    ma = max(ls)
+    size = ((ma - mi) // (len(ls) - 1)) + 1
+    buckets = [[] for _ in ls]
+    for n in ls:
+        bucket = (n - mi) // size
+        buckets[bucket].append(n)
+    ret = []
+    for bucket in buckets:
+        bucket.sort()
+        for i in bucket:
+            ret.append(i)
+    return ret
+
+
+from functools import lru_cache
+
+
+@lru_cache(None)
+def dp():
+    return 0
+
+
+dp.cache_clear()
