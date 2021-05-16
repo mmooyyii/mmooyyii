@@ -4,8 +4,12 @@
 import math
 import random
 from sys import setrecursionlimit
+import bisect
+
+import collections
 
 setrecursionlimit(9999999)
+MOD = 1_000_000_007
 
 
 def is_palindrome(n):
@@ -108,12 +112,29 @@ class SkipListNode:
         self.k = k
         self.next = None
         self.down = None
-        self.span = 1
 
 
 class SkipList:
+    """
+    There are 4 kind of SkipListNode
+
+    1) [next] # first node in every layer
+    2) [k,next] # mid node without down pointer
+    3) [k,next,down] # mid node with down pointer
+    4) [k,next,v] # leaf node
+
+    table example
+    Layer1: root->          2
+                            |
+    Layer2: root->          2 -> 3
+                            |    |
+    Layer3: root->          2 -> 3     ->       6
+                            |    |              |
+    Layer4: root->0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
+    """
 
     def __init__(self):
+
         self.high = 1
         self.root = SkipListNode()
         self.kv = {}
@@ -182,7 +203,7 @@ class SkipList:
         while head:
             node = head.next
             head = head.down
-            print("Layer: ", end='')
+            print("Layer: root->", end='')
             while node:
                 if node.next:
                     print(node.k, end=' -> ')
@@ -193,6 +214,12 @@ class SkipList:
 
     def rank(self, n):
         pass
+
+
+s = SkipList()
+for i in range(8):
+    s.add(i, i)
+print(s.show())
 
 
 class SegmentTree:
@@ -289,12 +316,36 @@ def dijkstra(start, end, g):
     return -1
 
 
-def karp_rabin(pre_hash, string):
-    for char in string:
-        pre_hash *= 27
-        pre_hash += ord(char) - ord('a') + 1
-        pre_hash %= 100_000_0007
-    return pre_hash
+# karp_rabin
+
+
+class KarpRabin:
+    big_prime = 16777619
+    int64 = 1 << 64
+
+    def __init__(self, string):
+        self.length = len(string)
+        self.hash = 0
+        for char in string:
+            self.hash *= KarpRabin.big_prime
+            self.hash += ord(char)
+            self.hash %= KarpRabin.int64
+
+    def add_tail(self, char):
+        self.hash *= KarpRabin.big_prime
+        self.hash += ord(char)
+        self.hash %= KarpRabin.int64
+        self.length += 1
+
+    def sub_head(self, char):
+        sub = ord(char)
+        for _ in range(self.length - 1):
+            sub *= KarpRabin.big_prime
+            sub %= KarpRabin.int64
+        self.hash += KarpRabin.int64
+        self.hash -= sub
+        self.hash %= KarpRabin.int64
+        self.length -= 1
 
 
 # python 的 str() in str() 也是O(n)
@@ -401,3 +452,25 @@ def dp():
 
 
 dp.cache_clear()
+
+#  字典顺的下一个
+def nextPermutation(nums):
+    if len(nums) <= 1:
+        return
+    for i in range(len(nums) - 2, -1, -1):
+        if nums[i] < nums[i + 1]:
+            for k in range(len(nums) - 1, i, -1):
+                if nums[k] > nums[i]:
+                    nums[i], nums[k] = nums[k], nums[i]
+                    nums[i + 1:] = sorted(nums[i + 1:])
+                    return
+        elif i == 0:
+            nums.sort()
+    raise ValueError
+
+# 绝对值展开，也许可以简化计算
+# abs(a-b) + abs(c-d) = max{a-b + (c-d),-a+b + (c-d),a-b + (-c+d),-a+b + (-c+d)}
+
+# 验证答案需要O(n)的情况下，考虑使用二分法
+# 离线查询的情况下，记得可以调整查询的顺序
+

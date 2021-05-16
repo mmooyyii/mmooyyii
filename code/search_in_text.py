@@ -1,51 +1,51 @@
 import random
 import time
-import re
 
-alpha = 'qwertyuiop1234567890asdfghjklzxcvbnmQWERTYUIOPASDFGHJKZXCVBNM         '
+with open('../data/莎士比亚全集英文版.txt', 'r') as f:
+    code = str(f.read())
 
-code = ''.join([random.choice(alpha) for _ in range(5_000)])
+
+def split_by_char(chars, text):
+    tmp = []
+    for i, char in enumerate(text):
+        if char in chars:
+            if tmp:
+                yield i - len(tmp), ''.join(tmp)
+                tmp = []
+        else:
+            tmp.append(char)
+    if tmp:
+        yield len(text) - len(tmp), ''.join(tmp)
 
 
 class InvertedIndex:
 
     def __init__(self, text):
-        self.origin_text = text
-        self.window_size = 4
         self.index = self.build_index(text)
 
-    def build_index(self, text):
-        ret = {}
-        for window_size in range(1, self.window_size + 1):
-            for index in range(len(text) - window_size + 1):
-                window = text[index:index + window_size]
-                ret.setdefault(window, []).append(index)
-        return ret
+    @staticmethod
+    def build_index(text: str):
+        d = {}
+        for idx, word in split_by_char({'\n', '.', ';', '?', '\t', ' ', ',', '', '!'}, text):
+            d.setdefault(word, [])
+            d[word].append(idx)
 
     def search(self, word):
-        if len(word) <= self.window_size:
-            return list(map(lambda x: [x, x + len(word)], self.index.setdefault(word, [])))
-        else:
-            ret = []
-            for index in range(len(word) - self.window_size + 1):
-                sub_text = word[index:index + self.window_size]
-                possibles = self.index.setdefault(sub_text, [])
-                for possible in possibles:
-                    left = possible - index
-                    right = left + len(word)
-                    if self.origin_text[left:right] == word:
-                        ret.append((left, right))
-            return ret
+        if word in self.index:
+            return self.index[word]
+        return []
 
 
 start = time.time()
 i = InvertedIndex(code)
-for _ in range(50000):  # 36.39s
-    pattern = ''.join([random.choice(alpha) for _ in range(4)])
-    i.search(pattern)
-print(time.time() - start)
-start = time.time()
-for _ in range(50000):  # 125.61s
-    pattern = ''.join([random.choice(alpha) for _ in range(4)])
-    a = pattern in code
+a = i.search("The")
+print(a)
+# for _ in range(50000):  # 36.39s
+#     pattern = 'remainder'
+#     i.search(pattern)
+# print(time.time() - start)
+# start = time.time()
+# for _ in range(50000):  # 125.61s
+#     pattern = 'remainder'
+#     a = pattern in code
 print(time.time() - start)
