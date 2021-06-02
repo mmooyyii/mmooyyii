@@ -453,6 +453,7 @@ def dp():
 
 dp.cache_clear()
 
+
 #  字典顺的下一个
 def nextPermutation(nums):
     if len(nums) <= 1:
@@ -468,9 +469,18 @@ def nextPermutation(nums):
             nums.sort()
     raise ValueError
 
+
 # 绝对值展开，也许可以简化计算
 # abs(a-b) + abs(c-d) = max{a-b + (c-d),-a+b + (c-d),a-b + (-c+d),-a+b + (-c+d)}
 
 # 验证答案需要O(n)的情况下，考虑使用二分法
 # 离线查询的情况下，记得可以调整查询的顺序
+
+# 像 a / b = c a % b = c 这种情况 遍历a c 会比 遍历 a b更快
+
+
+
+def scan_list():
+    n = int(input())
+    return [input() for _ in range(n)]
 

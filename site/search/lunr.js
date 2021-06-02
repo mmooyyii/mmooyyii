@@ -736,7 +736,7 @@ lunr.Vector.prototype.toJSON = function () {
 /*!
  * lunr.stemmer
  * Copyright (C) 2018 Oliver Nightingale
- * Includes code from - http://tartarus.org/~martin/PorterStemmer/js.txt
+ * Includes codes from - http://tartarus.org/~martin/PorterStemmer/js.txt
  */
 
 /**
@@ -2958,7 +2958,7 @@ lunr.QueryParser.parseBoost = function (parser) {
 
   /**
    * export the module via AMD, CommonJS or as a browser global
-   * Export code from https://github.com/umdjs/umd/blob/master/returnExports.js
+   * Export codes from https://github.com/umdjs/umd/blob/master/returnExports.js
    */
   ;(function (root, factory) {
     if (typeof define === 'function' && define.amd) {
