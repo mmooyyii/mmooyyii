@@ -5,10 +5,9 @@ import math
 import random
 from sys import setrecursionlimit
 import bisect
-
+from typing import *
 import collections
 
-setrecursionlimit(9999999)
 MOD = 1_000_000_007
 
 
@@ -212,36 +211,29 @@ class SkipList:
                 node = node.next
             print()
 
-    def rank(self, n):
-        pass
-
-
-s = SkipList()
-for i in range(8):
-    s.add(i, i)
-print(s.show())
-
 
 class SegmentTree:
 
     def __init__(self, ls, calc=lambda x, y: x + y):
+        def f(a, b):
+            if a is None:
+                return b
+            elif b is None:
+                return a
+            else:
+                return calc(a, b)
+
         self.data = ls
-        self.calc = calc
+        self.calc = f
         self.tree = [0 for _ in range(len(ls) * 4)]
         for i, v in enumerate(ls):
             self.tree[i + len(self.data)] = v
         for i in range(len(ls) - 1, 0, -1):
             self.tree[i] = self.calc(self.tree[i * 2], self.tree[i * 2 + 1])
 
-    def __len__(self):
-        return len(self.data)
-
-    def __getitem__(self, item):
-        return self.data[item]
-
     def __setitem__(self, key, value):
         self.data[key] = value
-        pos = key + len(self)
+        pos = key + len(self.data)
         self.tree[pos] = value
         while pos:
             left, right = pos, pos
@@ -252,11 +244,10 @@ class SegmentTree:
             pos >>= 1
             self.tree[pos] = self.calc(self.tree[left], self.tree[right])
 
-    def range(self, left, right):
-        # 左右都能取到
-        rt = 0
-        left += len(self)
-        right += len(self)
+    def range(self, left, right):  # 左右都能取到
+        rt = None
+        left += len(self.data)
+        right += len(self.data)
         while left <= right:
             if left & 1:
                 rt = self.calc(rt, self.tree[left])
@@ -267,9 +258,6 @@ class SegmentTree:
             left >>= 1
             right >>= 1
         return rt
-
-
-a = SegmentTree([1, 2, 3, 4, 3, 2, 1], min)
 
 
 def init_digraph(n, edges):
@@ -398,6 +386,9 @@ def prime(n):
     return ret
 
 
+print(prime(100000))
+
+
 class UnionFind:
     def __init__(self, n):
         self.uf = [-1 for _ in range(n)]
@@ -478,9 +469,16 @@ def nextPermutation(nums):
 
 # 像 a / b = c a % b = c 这种情况 遍历a c 会比 遍历 a b更快
 
+class RangeCount:
+    # 范围内某个数的个数： index倒排 + 二分查找  空间O(n) 时间O(logN)
+    def __init__(self, ls):
+        #  0 <= ls[i] <= ma
+        ma = max(ls)
+        self.data = [[] for _ in range(ma + 1)]
+        for i, v in enumerate(ls):
+            self.data[v].append(i)
 
+    def count(self, lo, hi, v):
+        return binary_search_lte(hi, self.data[v]) - binary_search_lt(lo, self.data[v])
 
-def scan_list():
-    n = int(input())
-    return [input() for _ in range(n)]
-
+# max(|X-x|,|Y-y|) = max(X-x,x-X,Y-y,y-Y)
