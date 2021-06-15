@@ -181,7 +181,7 @@ func main() {
 	print(a())
 }
 ```
-然而，运行这段代码并不奏效，会导致分段故障。这是因为加载的二进制文件[在默认情况下是不可写的](https://en.wikipedia.org/wiki/Segmentation_fault#Writing_to_read-only_memory)。
+然而，运行这段代码并不奏效，会导致`Segmentfault`。这是因为加载的二进制文件[在默认情况下是不可写的](https://en.wikipedia.org/wiki/Segmentation_fault#Writing_to_read-only_memory)。
 我们可以使用`mprotect`系统调用来禁用这种保护，这段最终版本的代码正是这样做的，结果是函数`a`被函数`b`取代，'2'被打印。
 ```go
 package main
