@@ -1,6 +1,9 @@
-import io, os
+{
+ "clusterName": "",
+ "itemsPerPage": 10,
+ "labelsLimit": 3,
+ "logsAutoRefreshTimeInterval": 5,
+ "resourceAutoRefreshTimeInterval": 5,
+ "disableAccessDeniedNotifications": false
+}
 
-input = io.BytesIO(os.read(0, os.fstat(0).st_size)).readline
-
-os.write(1, b"123123")
-input()

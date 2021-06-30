@@ -1,6 +1,16 @@
 """
 记录一些LeetCode常常会用的的函数与数据结构
 """
+"""
+# 绝对值展开，也许可以简化计算
+# abs(a-b) + abs(c-d) = max{a-b + (c-d),-a+b + (c-d),a-b + (-c+d),-a+b + (-c+d)}
+
+# 验证答案需要O(n)的情况下，考虑使用二分法
+# 离线查询的情况下，记得可以调整查询的顺序
+
+# 像 a / b = c a % b = c 这种情况 遍历a c 会比 遍历 a b更快
+"""
+
 import math
 import random
 from sys import setrecursionlimit
@@ -72,14 +82,6 @@ def comb(elements, n):
     import itertools
     for i in itertools.combinations(elements, n):
         print(i)
-
-
-# 阶乘
-def factorial(n):
-    ret = 1
-    for i in range(1, n + 1):
-        ret *= i
-    return ret
 
 
 # 等比数列求和,q为整数
@@ -304,9 +306,6 @@ def dijkstra(start, end, g):
     return -1
 
 
-# karp_rabin
-
-
 class KarpRabin:
     big_prime = 16777619
     int64 = 1 << 64
@@ -386,7 +385,20 @@ def prime(n):
     return ret
 
 
-print(prime(100000))
+class SpiltPrime:
+
+    def __init__(self, max_value):
+        self.prime = prime(int(max_value ** 0.5) + 1)
+
+    # 因式分解
+    def split(self, n):
+        ret = []
+        for i in self.prime:
+            while n % i == 0:
+                n //= i
+                ret.append(i)
+            if n == 1 or i > n:
+                return ret
 
 
 class UnionFind:
@@ -461,18 +473,9 @@ def nextPermutation(nums):
     raise ValueError
 
 
-# 绝对值展开，也许可以简化计算
-# abs(a-b) + abs(c-d) = max{a-b + (c-d),-a+b + (c-d),a-b + (-c+d),-a+b + (-c+d)}
-
-# 验证答案需要O(n)的情况下，考虑使用二分法
-# 离线查询的情况下，记得可以调整查询的顺序
-
-# 像 a / b = c a % b = c 这种情况 遍历a c 会比 遍历 a b更快
-
 class RangeCount:
     # 范围内某个数的个数： index倒排 + 二分查找  空间O(n) 时间O(logN)
     def __init__(self, ls):
-        #  0 <= ls[i] <= ma
         ma = max(ls)
         self.data = [[] for _ in range(ma + 1)]
         for i, v in enumerate(ls):
@@ -481,4 +484,58 @@ class RangeCount:
     def count(self, lo, hi, v):
         return binary_search_lte(hi, self.data[v]) - binary_search_lt(lo, self.data[v])
 
-# max(|X-x|,|Y-y|) = max(X-x,x-X,Y-y,y-Y)
+
+def single_stack(ls):
+    stack = []
+    ret = []
+    for i in ls[::-1]:
+        while stack and stack[-1] <= i:
+            stack.pop()
+        if not stack:
+            ret.append(-1)
+        else:
+            ret.append(stack[-1])
+        stack.append(i)
+    ret.reverse()
+    return ret
+
+
+# 大鸟转转转
+def roll_roll_roll(matrix, n, depth):
+    maxx, maxy = len(matrix) - 1 - depth, len(matrix[0]) - 1 - depth
+
+    def nxt(x, y):
+        if y == depth and depth <= x < maxx:
+            return x + 1, y
+        if x == maxx and depth <= y < maxy:
+            return x, y + 1
+        if y == maxy and depth < x <= maxx:
+            return x - 1, y
+        if x == depth and depth < y <= maxy:
+            return x, y - 1
+        return x, y
+
+    x, y = depth, depth
+    tmp = []
+    while True:
+        tmp.append(matrix[x][y])
+        x, y = nxt(x, y)
+        if (x, y) == (depth, depth):
+            break
+    n %= len(tmp)
+    # n = len(tmp) - n # 逆时针或顺时针
+    tmp = tmp[n:] + tmp[:n]
+    x, y = depth, depth
+    print(tmp)
+    for i in tmp:
+        matrix[x][y] = i
+        x, y = nxt(x, y)
+    for row in matrix:
+        print(row)
+
+
+roll_roll_roll([
+    [1, 8, 7],
+    [2, 2, 6],
+    [3, 4, 5]
+], 1, 0)
