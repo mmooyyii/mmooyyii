@@ -1,12 +1,12 @@
-  - erlang:
-      - [在远程节点上使用recon_trace](docs/erlang/recon_trace.md)
-      - [模式匹配的时间复杂度](docs/erlang/match_spec.md)
-      - [type/1](docs/erlang/type.md)
-      - [使用断点调试rabbitmq](docs/erlang/使用断点调试rabbitmq.md)
-      
-  - go:
-      - [代码结构与gomock的使用](docs/go/gomock.md)
-      - [国庆看minio代码](docs/go/minio.md)
+  - 编程语言:
+    - erlang:
+        - [在远程节点上使用recon_trace](docs/erlang/recon_trace.md)
+        - [模式匹配的时间复杂度](docs/erlang/match_spec.md)
+        - [type/1](docs/erlang/type.md)
+        - [使用断点调试rabbitmq](docs/erlang/使用断点调试rabbitmq.md)
+    - go:
+        - [代码结构与gomock的使用](docs/go/gomock.md)
+        - [国庆看minio代码](docs/go/minio.md)
   - 机翻系列:
       - BeamBook翻译:
           - [Part I:ERTS](docs/erlang/beambook/ERTS_1.md)
