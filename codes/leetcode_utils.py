@@ -8,7 +8,15 @@
 # 验证答案需要O(n)的情况下，考虑使用二分法
 # 离线查询的情况下，记得可以调整查询的顺序
 
-# 像 a / b = c a % b = c 这种情况 遍历a c 会比 遍历 a b更快
+a / b = c 
+a % b = c 
+a ^ b = c
+这种情况 遍历a c 会比 遍历 a b更快
+
+
+费马小定理
+若 p 为素数 gcd(a,p)==1，则 a^(p-1) === 1 mod p
+另一个形式：对于任意整数 a ，有 a^p === 1 mod p
 """
 
 import math
@@ -41,6 +49,18 @@ def binary_search_lte(target: int, ls: list) -> int:
         else:
             right = mid
     return left
+
+
+def binary_search_lte(target: int, ls: list) -> int:
+    # 返回小于等于target的个数
+    left, right = 0, len(ls)
+    while left < right:
+        mid = (right + left) // 2
+        if ls[mid] <= target:
+            left = mid + 1
+        else:
+            right = mid
+    return left - 1
 
 
 def binary_search_lt(target: int, ls: list) -> int:
@@ -307,32 +327,54 @@ def dijkstra(start, end, g):
 
 
 class KarpRabin:
-    big_prime = 16777619
-    int64 = 1 << 64
+    big_primes = [16777619, 17]
+    maxInt = 1 << 32
 
-    def __init__(self, string):
-        self.length = len(string)
-        self.hash = 0
-        for char in string:
-            self.hash *= KarpRabin.big_prime
-            self.hash += ord(char)
-            self.hash %= KarpRabin.int64
+    def __init__(self, string, n):
+        if n > len(string):
+            raise ValueError
+        self.length = 0
+        self.hash = [0 for _ in KarpRabin.big_primes]
+        self.s = string
+        self.n = n
+        self.to_int = int
+        self.sub_memo = {}
+        for char in string[:n]:
+            self.add_tail(char)
 
     def add_tail(self, char):
-        self.hash *= KarpRabin.big_prime
-        self.hash += ord(char)
-        self.hash %= KarpRabin.int64
+        for i in range(len(KarpRabin.big_primes)):
+            self.hash[i] *= KarpRabin.big_primes[i]
+            self.hash[i] += self.to_int(char)
+            self.hash[i] %= KarpRabin.maxInt
         self.length += 1
 
     def sub_head(self, char):
-        sub = ord(char)
-        for _ in range(self.length - 1):
-            sub *= KarpRabin.big_prime
-            sub %= KarpRabin.int64
-        self.hash += KarpRabin.int64
-        self.hash -= sub
-        self.hash %= KarpRabin.int64
+        for i in range(len(KarpRabin.big_primes)):
+            key = (self.length - 1, i)
+            if key in self.sub_memo:
+                sub = self.sub_memo[key]
+            else:
+                sub = 1
+                for _ in range(self.length - 1):
+                    sub *= KarpRabin.big_primes[i]
+                    sub %= KarpRabin.maxInt
+                self.sub_memo[key] = sub
+            sub *= self.to_int(char)
+            sub %= KarpRabin.maxInt
+            self.hash[i] += KarpRabin.maxInt
+            self.hash[i] -= sub
+            self.hash[i] %= KarpRabin.maxInt
         self.length -= 1
+
+    def scan(self):
+        yield tuple(self.hash)
+        for i in range(len(self.s) - self.n):
+            tail = self.s[i + self.n]
+            self.add_tail(tail)
+            head = self.s[i]
+            self.sub_head(head)
+            yield tuple(self.hash)
 
 
 # python 的 str() in str() 也是O(n)
@@ -370,6 +412,20 @@ def boyer_moore(pattern, text):
     return False
 
 
+def miller_rabin(p):
+    """
+    费马小定理
+    若 p 为素数 gcd(a,p)==1，则 a^(p-1) === 1 mod p
+    另一个形式：对于任意整数 a ，有 a^p === a (mod p)
+    """
+    if p < 3:
+        return p == 2
+    for _ in range(8):
+        if pow(random.randint(2, p - 1), p - 1, p) != 1:
+            return False
+    return True
+
+
 def prime(n):
     memo = [1 for _ in range(n)]
     ret = []
@@ -383,6 +439,10 @@ def prime(n):
                 break
             j += 1
     return ret
+
+
+a = prime(int(1e8))
+print(a)
 
 
 class SpiltPrime:
@@ -532,10 +592,3 @@ def roll_roll_roll(matrix, n, depth):
         x, y = nxt(x, y)
     for row in matrix:
         print(row)
-
-
-roll_roll_roll([
-    [1, 8, 7],
-    [2, 2, 6],
-    [3, 4, 5]
-], 1, 0)
