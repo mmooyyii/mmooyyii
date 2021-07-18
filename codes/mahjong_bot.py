@@ -168,11 +168,6 @@ def run():
 
 
 if __name__ == '__main__':
-    for i in range(1000):
-        try:
-            p = to_chinese(i)
-            print(f"to_chinese({i})-> '{p}';")
-        except:
-            pass
+    run()
 
     # print(ting([11, 12, 13, 14, 15]))
