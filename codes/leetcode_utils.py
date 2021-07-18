@@ -293,15 +293,37 @@ def floyd(n, g: dict):
     return ret
 
 
-def dijkstra(start, end, g):
+def dijkstra2(start, g):
     import heapq
+    vis = {}
     heap = [(0, start)]
+    vis[start] = 0
+    ret = {}
     while heap:
         dist, node = heapq.heappop(heap)
+        ret.setdefault(node, float('inf'))
+        ret[node] = min(ret[node], dist)
         for n, weight in g[node].items():
-            if n == end:
-                return dist + weight
-            else:
+            if n not in vis or (n in vis and vis[n] > dist + weight):
+                vis[n] = dist + weight
+                heapq.heappush(heap, (dist + weight, n))
+    return ret
+
+
+def dijkstra(start, end, g):
+    import heapq
+    vis = {}
+    heap = [(0, start)]
+    vis[start] = 0
+    while heap:
+        dist, node = heapq.heappop(heap)
+        if node == end:
+            return dist
+        if vis[node] < dist:
+            continue
+        for n, weight in g[node].items():
+            if n not in vis or (n in vis and vis[n] > dist + weight):
+                vis[n] = dist + weight
                 heapq.heappush(heap, (dist + weight, n))
     return -1
 
@@ -539,3 +561,32 @@ roll_roll_roll([
     [2, 2, 6],
     [3, 4, 5]
 ], 1, 0)
+
+
+def hungary(girls_expect, boys, girls):
+    """
+    graph: {girl1: {boy1,boy2....}}
+    boys: the number of boys
+    girls: the number of girls
+    """
+
+    boys_expect = {i: set() for i in range(boys)}
+    for girl, boysList in girls_expect.items():
+        for boy in boysList:
+            boys_expect[boy].add(girl)
+
+    def find(boy):
+        for girl in boys_expect[boy]:
+            if tried[girl] == 0:
+                tried[girl] = 1
+                if girl not in girl_choice or find(girl_choice[girl]):
+                    girl_choice[girl] = boy
+                    return True
+        return False
+
+    girl_choice = [-1 for _ in range(girls)]
+    for boy in range(boys):
+        tried = [0 for _ in range(girls)]
+        find(boy)
+
+    return girl_choice
