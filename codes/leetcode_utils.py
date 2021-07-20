@@ -634,3 +634,63 @@ def hungary(girls_expect, boys, girls):
         find(boy)
 
     return girl_choice
+
+
+class MaxXor:
+    MaxSize = 16
+
+    def __init__(self):
+        self.root = {}
+        self.count = {}
+
+    def add(self, n):
+        self.count.setdefault(n, 0)
+        self.count[n] += 1
+        b = bin(n)[2:]
+        b = '0' * (MaxXor.MaxSize - len(b)) + b
+        node = self.root
+        for bit in b:
+            node = node.setdefault(bit, {})
+
+    def remove(self, n):
+
+        self.count[n] -= 1
+        if self.count[n] == 0:
+            print('before', n, self.root)
+            b = bin(n)[2:]
+            b = '0' * (MaxXor.MaxSize - len(b)) + b
+            node = self.root
+            chain = []
+            for bit in b:
+                chain.append([bit, node])
+                node = node.setdefault(bit, {})
+
+            while chain:
+                bit, node = chain.pop()
+                if node[bit] == {}:
+                    node.pop(bit)
+            print('after', n, self.root)
+
+    def get(self, n):
+        b = bin(n)[2:]
+        b = '0' * (MaxXor.MaxSize - len(b)) + b
+        node = self.root
+        ret = 0
+        for bit in b:
+            ret <<= 1
+            if len(node) == 2:
+                ret += 1
+                if bit == '0':
+                    node = node['1']
+                else:
+                    node = node['0']
+            else:
+                try:
+                    k = list(node.keys())[0]
+                    ret += int(k) ^ int(bit)
+                    node = node[k]
+                except:
+                    print(self.root,n)
+                    raise RuntimeError
+
+        return ret
