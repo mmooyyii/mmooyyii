@@ -28,7 +28,7 @@ import collections
 
 MOD = 1_000_000_007
 
-
+setrecursionlimit(int(1e9))
 def is_palindrome(n):
     n = str(n)
     for i in range(len(n) // 2):
@@ -653,7 +653,6 @@ class MaxXor:
             node = node.setdefault(bit, {})
 
     def remove(self, n):
-
         self.count[n] -= 1
         if self.count[n] == 0:
             print('before', n, self.root)
@@ -685,12 +684,7 @@ class MaxXor:
                 else:
                     node = node['0']
             else:
-                try:
-                    k = list(node.keys())[0]
-                    ret += int(k) ^ int(bit)
-                    node = node[k]
-                except:
-                    print(self.root,n)
-                    raise RuntimeError
-
+                k = list(node.keys())[0]
+                ret += int(k) ^ int(bit)
+                node = node[k]
         return ret
