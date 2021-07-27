@@ -1,6 +1,7 @@
 package share_socket
 
 import (
+	"errors"
 	"fmt"
 	"net"
 	"os"
@@ -19,20 +20,20 @@ func SendSocket(unixConn *net.UnixConn, conn net.Conn) {
 	fmt.Println("send conn")
 	fd := ConnToFd(conn)
 	oob := syscall.UnixRights(int(fd))
-	_, _, _ = unixConn.WriteMsgUnix(nil, oob, nil)
+	_, _, _ = unixConn.WriteMsgUnix([]byte("client"), oob, nil)
 }
 
-func ReceiveFd(conn *net.UnixConn) (string, uintptr) {
+func ReceiveFd(conn *net.UnixConn) (string, uintptr, error) {
 	buf := make([]byte, 32)
 	oob := make([]byte, 32)
 	bufn, oobn, _, _, _ := conn.ReadMsgUnix(buf, oob)
 	buf = buf[:bufn]
 	scms, _ := syscall.ParseSocketControlMessage(oob[:oobn])
 	if len(scms) == 0 {
-		panic("error")
+		return "", 0, errors.New("unix domain close")
 	}
 	fds, _ := syscall.ParseUnixRights(&(scms[0]))
-	return string(buf), uintptr(fds[0])
+	return string(buf), uintptr(fds[0]), nil
 }
 
 func ListenerToFd(c net.Listener) uintptr {

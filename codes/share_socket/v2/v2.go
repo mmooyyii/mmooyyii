@@ -22,7 +22,10 @@ func (t *TcpServer) startLoop() {
 	listener, _ := net.ListenUnix("unix", laddr)
 	conn, _ := listener.AcceptUnix()
 	for {
-		tp, fd := share_socket.ReceiveFd(conn)
+		tp, fd, err := share_socket.ReceiveFd(conn)
+		if err != nil {
+			break
+		}
 		if tp == "lister" {
 			l := share_socket.FdToListener(fd)
 			t.listen = l
@@ -36,7 +39,7 @@ func (t *TcpServer) startLoop() {
 					go handle(conn)
 				}
 			}()
-		} else {
+		} else if tp == "client" {
 			conn := share_socket.FdToConn(fd)
 			t.conn = append(t.conn, conn)
 			go handle(conn)

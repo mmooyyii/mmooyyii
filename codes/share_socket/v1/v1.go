@@ -21,8 +21,20 @@ func (t *TcpServer) Update() {
 	raddr, _ := net.ResolveUnixAddr("unix", unixSocket)
 	unixConn, _ := net.DialUnix("unix", nil, raddr)
 	share_socket.SendListener(unixConn, t.listen)
+	err := t.listen.Close()
+	if err != nil {
+		return
+	}
 	for _, c := range t.conn {
 		share_socket.SendSocket(unixConn, c)
+		err := c.Close()
+		if err != nil {
+			return
+		}
+	}
+	err = unixConn.Close()
+	if err != nil {
+		return
 	}
 }
 
@@ -35,7 +47,7 @@ func (t *TcpServer) startLoop(address string) {
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
-			return // 终止程序
+			return
 		}
 		t.conn = append(t.conn, conn)
 		go handle(conn)
@@ -64,5 +76,4 @@ func main() {
 	signal.Notify(signals, syscall.SIGINT)
 	<-signals
 	t.Update()
-	fmt.Scanln()
 }
