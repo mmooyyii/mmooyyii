@@ -72,11 +72,11 @@ Saved corefile core.3199
 [Inferior 1 (process 3199) detached]
 ```
 
-3. 使用goland恢复coredump
+3. 使用goland恢复coredump  
    ![img.png](../img/img.png)
    ![img_2.png](../img/img_2.png)
 
-4. 查看进程内的情况 发现大量与net.http有关的goroutine未被释放
+4. 查看进程内的情况 发现大量与net.http有关的goroutine未被释放  
    ![img_1.png](../img/img_1.png)
    ![img_3.png](../img/img_3.png)
 
