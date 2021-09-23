@@ -7,6 +7,7 @@
     - go:
         - [代码结构与gomock的使用](docs/go/gomock.md)
         - [国庆看minio代码](docs/go/minio.md)
+        - [使用coredump解决生产环境的bug](docs/go/使用coredump解决生产环境的bug.md)
   - 机翻系列:
       - BeamBook翻译:
           - [Part I:ERTS](docs/erlang/beambook/ERTS_1.md)
