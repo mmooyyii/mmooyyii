@@ -16,7 +16,7 @@ a ^ b = c
 
 费马小定理
 若 p 为素数 gcd(a,p)==1，则 a^(p-1) === 1 mod p
-另一个形式：对于任意整数 a ，有 a^p === 1 mod p
+另一个形式：对于任意整数 a ，有 a^p === a mod p
 """
 
 import math
@@ -29,6 +29,8 @@ import collections
 MOD = 1_000_000_007
 
 setrecursionlimit(int(1e9))
+
+
 def is_palindrome(n):
     n = str(n)
     for i in range(len(n) // 2):
@@ -600,13 +602,6 @@ def roll_roll_roll(matrix, n, depth):
         print(row)
 
 
-roll_roll_roll([
-    [1, 8, 7],
-    [2, 2, 6],
-    [3, 4, 5]
-], 1, 0)
-
-
 def hungary(girls_expect, boys, girls):
     """
     graph: {girl1: {boy1,boy2....}}
@@ -688,3 +683,66 @@ class MaxXor:
                 ret += int(k) ^ int(bit)
                 node = node[k]
         return ret
+
+
+def dot(matrix1, matrix2):
+    if len(matrix1[0]) != len(matrix2):
+        raise ValueError
+    ans = [[0 for _ in matrix2[0]] for _ in matrix1]
+    for x in range(len(ans)):
+        for y in range(len(ans[0])):
+            for i in range(len(matrix1[0])):
+                ans[x][y] += matrix1[x][i] * matrix2[i][y]
+
+    return ans
+
+
+p = [[0, 1], [1, 1]]
+a = [[1, 1]]
+
+
+def q_pow(matrix, b):
+    ans = matrix
+    b -= 1
+    while b > 0:
+        if b & 1:
+            ans = dot(ans, matrix)
+        matrix = dot(matrix, matrix)
+        b >>= 1
+    return ans
+
+
+def rank(ls):
+    rk = [0 for _ in ls]
+    ls = [(v, i) for i, v in enumerate(ls)]
+    ls.sort()
+    pre = 0
+    for i in range(len(ls)):
+        r = i
+        if ls[i - 1][0] == ls[i][0]:
+            r = pre
+        idx = ls[i][1]
+        rk[idx] = r
+        pre = r
+    return rk
+
+
+def suffix_array(s):
+    rk = rank(s)
+    skip = 1
+    while skip < len(s):
+        source = [[0, 0] for _ in s]
+        for i in range(len(s)):
+            source[i][0] = rk[i]
+            if i + skip < len(s):
+                source[i][1] = rk[i + skip]
+        rk = rank(source)
+        skip *= 2
+    sa = [0 for _ in s]
+    for i in range(len(s)):
+        sa[rk[i]] = i
+    return sa, rk
+
+
+sa, rk = suffix_array("ababa")
+print(*map(lambda x: x + 1, sa))
