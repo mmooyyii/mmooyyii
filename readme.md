@@ -19,7 +19,7 @@
       - [利用泰勒展开式写配置文件](docs/algorithm/taylor.md)
       - [LeetCode常用函数](codes/leetcode_utils.py)
   - 操作系统/网络:
-      - [对长连接服务热更新](docs/os/hot_update_with_socket.md)
+      - [对长连接服务热更新](code/share_socket)
   - 运维:
       - [k8s的kafka部署](codes/kafka.yml)
   - 数据库:
