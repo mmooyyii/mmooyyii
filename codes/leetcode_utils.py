@@ -17,6 +17,9 @@ a ^ b = c
 费马小定理
 若 p 为素数 gcd(a,p)==1，则 a^(p-1) === 1 mod p
 另一个形式：对于任意整数 a ，有 a^p === a mod p
+
+if MartixA @ MartixB = MartixC
+then MartixC @ np.linag.inv(MatrixA) = MatrixB
 """
 
 import math
@@ -746,3 +749,21 @@ def suffix_array(s):
 
 sa, rk = suffix_array("ababa")
 print(*map(lambda x: x + 1, sa))
+
+# 数论分块
+def slow(n):
+    ans = 0
+    for i in range(1, n + 1):
+        ans += n // i
+    return ans
+
+
+def quick(n):
+    ans = 0
+    l, r = 1, 0
+    while l <= n:
+        r = n // (n // l)
+        ans += (r - l + 1) * (n // l)
+        l = r + 1
+    return ans
+

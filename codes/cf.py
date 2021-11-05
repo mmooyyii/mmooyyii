@@ -1,4 +1,5 @@
-import os
+import bisect
+import random
 import sys
 
 
@@ -14,10 +15,22 @@ def cin_int():
     return int(input())
 
 
-def talk(text):
-    print(text)
-    sys.stdout.flush()
+def slow(n):
+    ans = 0
+    for i in range(1, n + 1):
+        ans += n // i
+    return ans
 
 
-if __name__ == '__main__':
-    pass
+def quick(n):
+    ans = 0
+    l, r = 1, 0
+    while l <= n:
+        r = n // (n // l)
+        ans += (r - l + 1) * (n // l)
+        l = r + 1
+    return ans
+
+
+b = quick(7772)
+print(b)
