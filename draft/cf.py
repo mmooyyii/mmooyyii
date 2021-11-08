@@ -15,22 +15,13 @@ def cin_int():
     return int(input())
 
 
-def slow(n):
-    ans = 0
-    for i in range(1, n + 1):
-        ans += n // i
-    return ans
+def fib(n):
+    if n <= 2:
+        return 1
+    return _fib(n - 2, 1, 1)
 
 
-def quick(n):
-    ans = 0
-    l, r = 1, 0
-    while l <= n:
-        r = n // (n // l)
-        ans += (r - l + 1) * (n // l)
-        l = r + 1
-    return ans
-
-
-b = quick(7772)
-print(b)
+def _fib(n, a, b):
+    if n == 0:
+        return a + b
+    return _fib(n - 1, b, a + b)

@@ -227,52 +227,37 @@ class SkipList:
             print()
 
 
+# copy from https://github.com/keon/algorithms/blob/master/algorithms/tree/segment_tree/segment_tree.py
 class SegmentTree:
+    def __init__(self, arr, function):
+        self.segment = [0 for x in range(3 * len(arr) + 3)]
+        self.arr = arr
+        self.fn = function
+        self.make_tree(0, 0, len(arr) - 1)
 
-    def __init__(self, ls, calc=lambda x, y: x + y):
-        def f(a, b):
-            if a is None:
-                return b
-            elif b is None:
-                return a
-            else:
-                return calc(a, b)
+    def make_tree(self, i, l, r):
+        if l == r:
+            self.segment[i] = self.arr[l]
+        elif l < r:
+            self.make_tree(2 * i + 1, l, int((l + r) / 2))
+            self.make_tree(2 * i + 2, int((l + r) / 2) + 1, r)
+            self.segment[i] = self.fn(self.segment[2 * i + 1], self.segment[2 * i + 2])
 
-        self.data = ls
-        self.calc = f
-        self.tree = [0 for _ in range(len(ls) * 4)]
-        for i, v in enumerate(ls):
-            self.tree[i + len(self.data)] = v
-        for i in range(len(ls) - 1, 0, -1):
-            self.tree[i] = self.calc(self.tree[i * 2], self.tree[i * 2 + 1])
+    def __query(self, i, L, R, l, r):
+        if l > R or r < L or L > R or l > r:
+            return None
+        if L >= l and R <= r:
+            return self.segment[i]
+        val1 = self.__query(2 * i + 1, L, int((L + R) / 2), l, r)
+        val2 = self.__query(2 * i + 2, int((L + R + 2) / 2), R, l, r)
+        if val1 is not None:
+            if val2 is not None:
+                return self.fn(val1, val2)
+            return val1
+        return val2
 
-    def __setitem__(self, key, value):
-        self.data[key] = value
-        pos = key + len(self.data)
-        self.tree[pos] = value
-        while pos:
-            left, right = pos, pos
-            if pos & 1:
-                left = pos - 1
-            else:
-                right = pos + 1
-            pos >>= 1
-            self.tree[pos] = self.calc(self.tree[left], self.tree[right])
-
-    def range(self, left, right):  # 左右都能取到
-        rt = None
-        left += len(self.data)
-        right += len(self.data)
-        while left <= right:
-            if left & 1:
-                rt = self.calc(rt, self.tree[left])
-                left += 1
-            if not right & 1:
-                rt = self.calc(rt, self.tree[right])
-                right -= 1
-            left >>= 1
-            right >>= 1
-        return rt
+    def query(self, L, R):
+        return self.__query(0, 0, len(self.arr) - 1, L, R)
 
 
 def init_digraph(n, edges):
@@ -750,6 +735,7 @@ def suffix_array(s):
 sa, rk = suffix_array("ababa")
 print(*map(lambda x: x + 1, sa))
 
+
 # 数论分块
 def slow(n):
     ans = 0
@@ -766,4 +752,3 @@ def quick(n):
         ans += (r - l + 1) * (n // l)
         l = r + 1
     return ans
-

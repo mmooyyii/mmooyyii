@@ -2,40 +2,45 @@ from typing import *
 from functools import lru_cache
 
 
-def bf(ls):
-    ans = set()
-    for i in range(len(ls) - 2):
-        for j in range(i + 1, len(ls) - 1):
-            for k in range(j + 1, len(ls)):
-                v = ls[i] + ls[j] + ls[k]
-                if v < 100:
-                    ans.add(v)
-    for i in range(99, -1, -1):
-        if i in ans:
-            return i
-    raise ValueError
+class SegmentTree:
+    def __init__(self, arr, function):
+        self.segment = [0 for x in range(3 * len(arr) + 3)]
+        self.arr = arr
+        self.fn = function
+        self.make_tree(0, 0, len(arr) - 1)
+
+    def make_tree(self, i, l, r):
+        if l == r:
+            self.segment[i] = self.arr[l]
+        elif l < r:
+            self.make_tree(2 * i + 1, l, int((l + r) / 2))
+            self.make_tree(2 * i + 2, int((l + r) / 2) + 1, r)
+            self.segment[i] = self.fn(self.segment[2 * i + 1], self.segment[2 * i + 2])
+
+    def __query(self, i, L, R, l, r):
+        if l > R or r < L or L > R or l > r:
+            return None
+        if L >= l and R <= r:
+            return self.segment[i]
+        val1 = self.__query(2 * i + 1, L, int((L + R) / 2), l, r)
+        val2 = self.__query(2 * i + 2, int((L + R + 2) / 2), R, l, r)
+        if val1 is not None:
+            if val2 is not None:
+                return self.fn(val1, val2)
+            return val1
+        return val2
+
+    def query(self, L, R):
+        return self.__query(0, 0, len(self.arr) - 1, L, R)
 
 
-def sv(ls):
-    dp = [[0, 0, 0] for _ in range(100)]
-    for i in ls:
-        tmp = [[0, 0, 0] for _ in range(100)]
-        for j, n in enumerate(dp):
-            if 0 <= i + j < 100:
-                tmp[i + j] = [0, n[0], n[1]]
-        if 0 <= i < 100:
-            tmp[i][0] = 1
-        for i, n in enumerate(tmp):
-            dp[i] = [max(dp[i][0], n[0]), max(dp[i][1], n[1]), max(dp[i][2], n[2])]
-
-    for i in range(99, -1, -1):
-        if dp[i][-1] == 1:
-            return i
-    raise ValueError
+def merge(a, b):
+    print(a,b)
+    return a + b
 
 
-import random
+s = SegmentTree([[i] for i in range(10)], function=merge)
+print("-------------------")
+print(s.query(1, 2))
+print(s.query(6, 7))
 
-ls = [random.randint(1, 10) for _ in range(20)]
-print(bf(ls))
-print(sv(ls))
