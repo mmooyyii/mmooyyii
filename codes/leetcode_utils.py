@@ -18,6 +18,7 @@ a ^ b = c
 若 p 为素数 gcd(a,p)==1，则 a^(p-1) === 1 mod p
 另一个形式：对于任意整数 a ，有 a^p === a mod p
 
+
 if MartixA @ MartixB = MartixC
 then MartixC @ np.linag.inv(MatrixA) = MatrixB
 """

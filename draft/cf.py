@@ -15,13 +15,24 @@ def cin_int():
     return int(input())
 
 
-def fib(n):
-    if n <= 2:
-        return 1
-    return _fib(n - 2, 1, 1)
+def sv(points, m):
+    pass
 
 
-def _fib(n, a, b):
-    if n == 0:
-        return a + b
-    return _fib(n - 1, b, a + b)
+import socket
+
+
+def d(func):
+    def _warp(*args, **kwargs):
+        print(*args, **kwargs)
+        return func(*args, **kwargs)
+
+    return _warp
+
+
+@d
+def fun(a):
+    pass
+
+
+fun("123")
