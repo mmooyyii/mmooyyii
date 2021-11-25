@@ -1,3 +1,4 @@
+# 简单计算
 .global _start
 
 _start:
