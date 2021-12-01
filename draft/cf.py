@@ -1,5 +1,4 @@
-import bisect
-import random
+import json
 import sys
 
 
@@ -13,5 +12,16 @@ def cin_int_ls():
 
 def cin_int():
     return int(input())
+
+
+
+
+import xmltodict
+
+with open(r"D:\workdir\articleServer\http\jmeter\TestPlan.jmx", 'r', encoding='utf8') as f:
+    j = json.dumps(xmltodict.parse(f.read()), indent=4, ensure_ascii=False)
+    print(j)
+
+print(xmltodict.unparse(j))
 
 

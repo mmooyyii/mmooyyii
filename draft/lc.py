@@ -2,54 +2,42 @@ from typing import *
 import random
 
 
-def pop_loop(edge):
-    node = max(edge.keys())
-    loop = [node]
-    while True:
-        nxt = edge[node][-1]
-        if nxt == loop[0]:
-            edge[node].remove(loop[0])
-            if not edge[node]:
-                edge.pop(node)
-            break
-        edge[node].pop()
-        if not edge[node]:
-            edge.pop(node)
-        loop.append(nxt)
-        node = nxt
+class UnionFind:
+    def __init__(self):
+        from collections import defaultdict
+        self.uf = defaultdict(lambda: -1)
+        self._count = 0
 
-    return len(loop)
+    def find(self, x):
+        r = x
+        while self.uf[x] >= 0:
+            x = self.uf[x]
+        while r != x:
+            self.uf[r], r = x, self.uf[r]
+        return x
 
+    def union(self, x, y):
+        ux, uy = self.find(x), self.find(y)
+        if ux == uy:
+            return
+        if ux <= 0 and uy <= 0:
+            self._count += 1
+        if self.uf[ux] < self.uf[uy]:
+            self.uf[ux] += self.uf[uy]
+            self.uf[uy] = ux
+        else:
+            self.uf[uy] += self.uf[ux]
+            self.uf[ux] = uy
 
-def bf(ls):
-    from itertools import permutations
-    from collections import defaultdict
-    c = list(Counter(ls).items())
-    ans = 1e9
-    for psb in permutations(c):
-        target = []
-        for k, v in psb:
-            target.extend([k] * v)
-        edge = defaultdict(list)
-        for i in range(len(ls)):
-            if target[i] != ls[i]:
-                edge[target[i]].append(ls[i])
-        tmp = 0
-        while edge:
-            tmp += pop_loop(edge) - 1
-        ans = min(ans, tmp)
-        if ans == tmp:
-            print(psb, tmp)
-    return ans
+    def count(self):
+        return self._count
+
+    def group_by(self):
+        pass
 
 
-a = []
-for i in range(1, 6):
-    a.extend([i] * random.randint(1, 10))
-random.shuffle(a)
-print(len(a), a)
-print(bf(a))
-
-
-def dp(idx, used):
-    pass
+uf = UnionFind()
+uf.union(1, 2)
+uf.union(2, 3)
+print(uf.uf)
+print(uf.count())

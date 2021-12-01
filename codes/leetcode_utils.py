@@ -460,7 +460,8 @@ class SpiltPrime:
 
 class UnionFind:
     def __init__(self, n):
-        self.uf = [-1 for _ in range(n)]
+        from collections import defaultdict
+        self.uf = defaultdict(lambda: -1)
         self.count_ = n
 
     def find(self, x):
