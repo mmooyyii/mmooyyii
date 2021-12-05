@@ -3,7 +3,6 @@ from multiprocessing.reduction import recv_handle, send_handle
 import socket
 
 
-
 def server_hot_update(in_p, out_p):
     out_p.close()
     while True:
@@ -46,3 +45,7 @@ if __name__ == '__main__':
 
     c1.close()
     c2.close()
+"""
+yingbingying@huawei.com
+
+"""

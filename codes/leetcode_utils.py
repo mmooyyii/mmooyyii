@@ -17,6 +17,15 @@ a ^ b = c
 费马小定理
 若 p 为素数 gcd(a,p)==1，则 a^(p-1) === 1 mod p
 另一个形式：对于任意整数 a ，有 a^p === 1 mod p
+
+a + b = (a & b) + (a | b)
+
+逆元
+
+ax === 1 (mod b)
+ax === a**(b-1) (mod b)
+x === a**(b-2) (mod b)
+x = pow(a,b-2,b)
 """
 
 import math
@@ -29,6 +38,12 @@ import collections
 MOD = 1_000_000_007
 
 setrecursionlimit(int(1e9))
+
+
+def exgcd(a, b):
+    return pow(a, b - 2, b)
+
+
 def is_palindrome(n):
     n = str(n)
     for i in range(len(n) // 2):
@@ -270,6 +285,10 @@ class SegmentTree:
         return rt
 
 
+s = SegmentTree([99, 123, 3, 4], calc=min)
+print(s.range(0, 2))
+
+
 def init_digraph(n, edges):
     g = {i: {} for i in range(n)}
     for a, b in edges:
@@ -454,17 +473,35 @@ def prime(n):
 class SpiltPrime:
 
     def __init__(self, max_value):
-        self.prime = prime(int(max_value ** 0.5) + 1)
+        self.primes = self.prime(int(max_value ** 0.5) + 1)
+
+    def prime(self, n):
+        memo = [1 for _ in range(n)]
+        ret = []
+        for i in range(2, n):
+            if memo[i]:
+                ret.append(i)
+            j = 0
+            while j < len(ret) and i * ret[j] < n:
+                memo[i * ret[j]] = False
+                if i % ret[j] == 0:
+                    break
+                j += 1
+        return ret
 
     # 因式分解
     def split(self, n):
         ret = []
-        for i in self.prime:
+        for i in self.primes:
             while n % i == 0:
                 n //= i
                 ret.append(i)
-            if n == 1 or i > n:
+            if n == 1:
                 return ret
+            if i >= n:
+                break
+        ret.append(n)
+        return ret
 
 
 class UnionFind:
@@ -600,13 +637,6 @@ def roll_roll_roll(matrix, n, depth):
         print(row)
 
 
-roll_roll_roll([
-    [1, 8, 7],
-    [2, 2, 6],
-    [3, 4, 5]
-], 1, 0)
-
-
 def hungary(girls_expect, boys, girls):
     """
     graph: {girl1: {boy1,boy2....}}
@@ -688,3 +718,102 @@ class MaxXor:
                 ret += int(k) ^ int(bit)
                 node = node[k]
         return ret
+
+
+class SegmentSum:
+
+    def __init__(self, ls):
+        start = 0
+        self.pre = [0]
+        for i in ls:
+            start += i
+            self.pre.append(start)
+
+    def range(self, l, r):
+        return self.pre[r] - self.pre[l]
+
+
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+
+def makeLeetCodeBinaryTree(data):
+    data = [TreeNode(i) if i else None for i in data]
+    root = data[0]
+    for i, v in enumerate(data):
+        if i * 2 + 1 < len(data):
+            v.left = data[i * 2 + 1]
+        if i * 2 + 2 < len(data):
+            v.right = data[i * 2 + 2]
+    return root
+
+
+def topo_sort(g: dict):
+    from collections import deque
+    node_in = {k: 0 for k in g}
+    for k, v in g.items():
+        for nxt in v:
+            node_in[nxt] += 1
+    q = deque()
+    for k, v in node_in.items():
+        if v == 0:
+            q.append(k)
+    ans = []
+    while len(q):
+        a = q.popleft()
+        ans.append(a)
+        for nxt in g[a]:
+            node_in[nxt] -= 1
+            if node_in[nxt] == 0:
+                q.append(nxt)
+    return ans
+
+
+class LinkedNode:
+
+    def __init__(self, v):
+        self.val = v
+        self.pre, self.nxt = None, None
+
+
+def list_to_linked_node(ls):
+    head = LinkedNode(None)
+    pre = head
+    for i in ls:
+        node = LinkedNode(i)
+        pre.nxt = node
+        node.pre = pre
+        pre = node
+    return head.nxt
+
+
+def print_link(head):
+    while head:
+        if head.nxt:
+            print(head.val, end=" -> ")
+        else:
+            print(head.val)
+        head = head.nxt
+
+
+def multi_source_bfs(start, g):
+    from collections import deque
+    q = deque()
+    vis = set()
+    used = set()
+    for i in start:
+        q.append(i)
+        used.add(i)
+        vis.add(i)
+    while q:
+        node = q.popleft()
+        print(node)
+        if node not in used:
+            used.add(node)
+            for nxt in g[node]:
+                if nxt not in vis:
+                    vis.add(nxt)
+                    q.append(nxt)
