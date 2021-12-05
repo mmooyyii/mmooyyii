@@ -28,19 +28,14 @@ x === a**(b-2) (mod b)
 x = pow(a,b-2,b)
 """
 
-import math
 import random
 from sys import setrecursionlimit
-import bisect
-from typing import *
-import collections
 
 MOD = 1_000_000_007
-
 setrecursionlimit(int(1e9))
 
 
-def exgcd(a, b):
+def ex_gcd(a, b):
     return pow(a, b - 2, b)
 
 
@@ -266,8 +261,9 @@ class SegmentTreeOrder:
             return val1
         return val2
 
-    def query(self, L, R):
-        return self.__query(0, 0, len(self.arr) - 1, L, R)
+    def query(self, l, r):
+        return self.__query(0, 0, len(self.arr) - 1, l, r)
+
 
 class SegmentTree:
 
@@ -590,7 +586,7 @@ dp.cache_clear()
 
 
 #  字典顺的下一个
-def nextPermutation(nums):
+def next_permutation(nums):
     if len(nums) <= 1:
         return
     for i in range(len(nums) - 2, -1, -1):
@@ -611,7 +607,8 @@ class RangeCount:
         ma = max(ls)
         self.data = [[] for _ in range(ma + 1)]
         for i, v in enumerate(ls):
-            self.data[v].append(i)
+            idx = self.data[v]
+            idx.append(i)
 
     def count(self, lo, hi, v):
         return binary_search_lte(hi, self.data[v]) - binary_search_lt(lo, self.data[v])
@@ -829,6 +826,7 @@ def quick(n):
         l = r + 1
     return ans
 
+
 class SegmentSum:
 
     def __init__(self, ls):
@@ -914,3 +912,15 @@ def multi_source_bfs(start, g):
     vis = set()
     used = set()
     for i in start:
+        q.append(i)
+        used.add(i)
+        vis.add(i)
+    while q:
+        node = q.popleft()
+        print(node)
+        if node not in used:
+            used.add(node)
+            for nxt in g[node]:
+                if nxt not in vis:
+                    vis.add(nxt)
+                    q.append(nxt)
