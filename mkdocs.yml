@@ -1,8 +1,14 @@
 site_name: A
 theme:
-  name: readthedocs
-  highlightjs: true
-  nav_style: dark
+  name: material
+  language: zh # 语言，默认为en
+  features:
+    - navigation.tabs
+  palette: # 颜色
+    primary: indigo # 主色
+    accent: indigo # 辅助色
+
+
 nav:
   - 主页: index.md
   - erlang:

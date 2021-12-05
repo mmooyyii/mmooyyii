@@ -16,7 +16,7 @@ a ^ b = c
 
 费马小定理
 若 p 为素数 gcd(a,p)==1，则 a^(p-1) === 1 mod p
-另一个形式：对于任意整数 a ，有 a^p === 1 mod p
+另一个形式：对于任意整数 a ，有 a^p === a mod p
 
 a + b = (a & b) + (a | b)
 
@@ -237,6 +237,38 @@ class SkipList:
             print()
 
 
+# copy from https://github.com/keon/algorithms/blob/master/algorithms/tree/segment_tree/segment_tree.py
+class SegmentTreeOrder:
+    def __init__(self, arr, function):
+        self.segment = [0 for x in range(3 * len(arr) + 3)]
+        self.arr = arr
+        self.fn = function
+        self.make_tree(0, 0, len(arr) - 1)
+
+    def make_tree(self, i, l, r):
+        if l == r:
+            self.segment[i] = self.arr[l]
+        elif l < r:
+            self.make_tree(2 * i + 1, l, int((l + r) / 2))
+            self.make_tree(2 * i + 2, int((l + r) / 2) + 1, r)
+            self.segment[i] = self.fn(self.segment[2 * i + 1], self.segment[2 * i + 2])
+
+    def __query(self, i, L, R, l, r):
+        if l > R or r < L or L > R or l > r:
+            return None
+        if L >= l and R <= r:
+            return self.segment[i]
+        val1 = self.__query(2 * i + 1, L, int((L + R) / 2), l, r)
+        val2 = self.__query(2 * i + 2, int((L + R + 2) / 2), R, l, r)
+        if val1 is not None:
+            if val2 is not None:
+                return self.fn(val1, val2)
+            return val1
+        return val2
+
+    def query(self, L, R):
+        return self.__query(0, 0, len(self.arr) - 1, L, R)
+
 class SegmentTree:
 
     def __init__(self, ls, calc=lambda x, y: x + y):
@@ -283,10 +315,6 @@ class SegmentTree:
             left >>= 1
             right >>= 1
         return rt
-
-
-s = SegmentTree([99, 123, 3, 4], calc=min)
-print(s.range(0, 2))
 
 
 def init_digraph(n, edges):
@@ -506,7 +534,8 @@ class SpiltPrime:
 
 class UnionFind:
     def __init__(self, n):
-        self.uf = [-1 for _ in range(n)]
+        from collections import defaultdict
+        self.uf = defaultdict(lambda: -1)
         self.count_ = n
 
     def find(self, x):
@@ -720,6 +749,86 @@ class MaxXor:
         return ret
 
 
+def dot(matrix1, matrix2):
+    if len(matrix1[0]) != len(matrix2):
+        raise ValueError
+    ans = [[0 for _ in matrix2[0]] for _ in matrix1]
+    for x in range(len(ans)):
+        for y in range(len(ans[0])):
+            for i in range(len(matrix1[0])):
+                ans[x][y] += matrix1[x][i] * matrix2[i][y]
+
+    return ans
+
+
+p = [[0, 1], [1, 1]]
+a = [[1, 1]]
+
+
+def q_pow(matrix, b):
+    ans = matrix
+    b -= 1
+    while b > 0:
+        if b & 1:
+            ans = dot(ans, matrix)
+        matrix = dot(matrix, matrix)
+        b >>= 1
+    return ans
+
+
+def rank(ls):
+    rk = [0 for _ in ls]
+    ls = [(v, i) for i, v in enumerate(ls)]
+    ls.sort()
+    pre = 0
+    for i in range(len(ls)):
+        r = i
+        if ls[i - 1][0] == ls[i][0]:
+            r = pre
+        idx = ls[i][1]
+        rk[idx] = r
+        pre = r
+    return rk
+
+
+def suffix_array(s):
+    rk = rank(s)
+    skip = 1
+    while skip < len(s):
+        source = [[0, 0] for _ in s]
+        for i in range(len(s)):
+            source[i][0] = rk[i]
+            if i + skip < len(s):
+                source[i][1] = rk[i + skip]
+        rk = rank(source)
+        skip *= 2
+    sa = [0 for _ in s]
+    for i in range(len(s)):
+        sa[rk[i]] = i
+    return sa, rk
+
+
+sa, rk = suffix_array("ababa")
+print(*map(lambda x: x + 1, sa))
+
+
+# 数论分块
+def slow(n):
+    ans = 0
+    for i in range(1, n + 1):
+        ans += n // i
+    return ans
+
+
+def quick(n):
+    ans = 0
+    l, r = 1, 0
+    while l <= n:
+        r = n // (n // l)
+        ans += (r - l + 1) * (n // l)
+        l = r + 1
+    return ans
+
 class SegmentSum:
 
     def __init__(self, ls):
@@ -805,15 +914,3 @@ def multi_source_bfs(start, g):
     vis = set()
     used = set()
     for i in start:
-        q.append(i)
-        used.add(i)
-        vis.add(i)
-    while q:
-        node = q.popleft()
-        print(node)
-        if node not in used:
-            used.add(node)
-            for nxt in g[node]:
-                if nxt not in vis:
-                    vis.add(nxt)
-                    q.append(nxt)
