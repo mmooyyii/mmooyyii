@@ -1,7 +1,3 @@
-"""
-
-数组推导
-"""
 import sys
 
 sys.setrecursionlimit(int(1e9))
