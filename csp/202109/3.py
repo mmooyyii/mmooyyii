@@ -29,11 +29,28 @@ class MyRand:
 
 class Cell:
 
-    def __init__(self):
-        pass
+    def __init__(self, a, b, c, d, dt):
+        self.a, self.b, self.c, self.d = a, b, c, d
+        self.vk_1 = 0
+        self.uk_1 = 0
+        self.dt = 0
+        self.ik = 0
+
+    def nxt(self, shock):
+        vk_1, uk_1 = self.vk_1, self.uk_1
+
+        new_vk = vk_1 + self.dt * (0.04 * vk_1 * vk_1 + 5 * vk_1 + 140 - uk_1) + self.ik
+        new_uk = uk_1 + self.dt * self.a * (self.b * vk_1 - uk_1)
+
+
+        self.vk_1, self.uk_1 = new_vk, new_uk
+        return
 
 
 mr = MyRand()
+
+c = Cell(0.02, 0.2, -65.0, 2.0, 0.1)
+print(c.nxt())
 
 
 def main():
@@ -46,6 +63,8 @@ def main():
         r = cin_int()
     for _ in range(s):
         s, t, w, d = cin_int_ls()
+    for _ in range(t):
+        pass
 
 
 # main()
