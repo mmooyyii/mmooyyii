@@ -15,13 +15,6 @@ def cin_int():
     return int(input())
 
 
-"""
-2 013
-2 031
-2 301
-"""
-
-
 def make_available():
     ans = {}
     for k in range(0b0000, 0b1111 + 1):

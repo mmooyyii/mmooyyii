@@ -67,6 +67,6 @@ def main():
         pass
 
 
-# main()
+
 for _ in range(10):
     print(mr.get())
