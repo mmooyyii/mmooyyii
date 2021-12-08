@@ -1,5 +1,4 @@
 """
-
 数组推导
 """
 import sys
@@ -18,18 +17,3 @@ def cin_int_ls():
 def cin_int():
     return int(input())
 
-
-def main():
-    cin_int()
-    ls = cin_int_ls()
-    from itertools import groupby
-
-    ma = sum(ls)
-    mi = 0
-    for i, _ in groupby(ls):
-        mi += i
-    print(ma)
-    print(mi)
-
-
-main()
