@@ -15,13 +15,9 @@ def cin_int():
     return int(input())
 
 
-def make_g(size=10000):
-    import random
-    from collections import defaultdict
-    g = defaultdict(list)
-    for i in range(size):
-        g[random.randint(0, size - 1)].append(i)
-    return g
+def main():
+    pass
 
-print(make_g(10))
 
+if __name__ == '__main__':
+    main()
