@@ -15,71 +15,72 @@ def cin_int():
     return int(input())
 
 
+def nxt_T(x, y):
+    ans = []
+    if mat[x][y] == '.':
+        ans = [[1, 0]]
+    elif mat[x][y] in '+ST':
+        ans = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+    elif mat[x][y] == '-':
+        ans = [[0, 1], [0, -1]]
+    elif mat[x][y] == '|':
+        ans = [[1, 0], [-1, 0]]
+    for dx, dy in ans:
+        if 0 <= x + dx < len(mat) and 0 <= y + dy < len(mat[0]) and mat[x + dx][y + dy] != '#':
+            yield x + dx, y + dy
+
+
+def nxt_R(x, y):
+    ans = []
+    dx, dy = 1, 0
+    if 0 <= x + dx < len(mat) and 0 <= y + dy < len(mat[0]) and mat[x + dx][y + dy] in 'S+|':
+        ans.append([x + dx, y + dy])
+    dx, dy = -1, 0
+    if 0 <= x + dx < len(mat) and 0 <= y + dy < len(mat[0]) and mat[x + dx][y + dy] in 'S+|.':
+        ans.append([x + dx, y + dy])
+    dx, dy = 0, 1
+    if 0 <= x + dx < len(mat) and 0 <= y + dy < len(mat[0]) and mat[x + dx][y + dy] in 'S+-':
+        ans.append([x + dx, y + dy])
+    dx, dy = 0, -1
+    if 0 <= x + dx < len(mat) and 0 <= y + dy < len(mat[0]) and mat[x + dx][y + dy] in 'S+-':
+        ans.append([x + dx, y + dy])
+    return ans
+
+
+mat = []
+
+
 def main():
-    def nxt(x, y):
-        ans = []
-        if mat[x][y] == '+' or mat[x][y] == 'S':
-            ans = [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]]
-        elif mat[x][y] == '-':
-            ans = [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]]
-        elif mat[x][y] == '|':
-            ans = [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]]
-        elif mat[x][y] == '.':
-            ans = [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]]
-        for nx, ny in ans:
-            if 0 <= nx < len(mat) and 0 <= ny < len(mat[0]) and mat[nx][ny] != '#':
-                yield nx, ny
+    def dfs(x, y):
+        for nx, ny in nxt_T(x, y):
+            if (nx, ny) not in toS:
+                toS.add((nx, ny))
+                dfs(nx, ny)
 
-    from functools import lru_cache
+    def dfs2(x, y):
+        for nx, ny in nxt_R(x, y):
+            if (nx, ny) not in toT:
+                toT.add((nx, ny))
+                dfs2(nx, ny)
 
-    vis = set()
-
-    @lru_cache(None)
-    def dp(x, y):
-        vis.add((x, y))
-        if x == sx and y == sy:
-            return False, True
-        if x == ex and y == ey:
-            return False, True
-        a, b = False, False
-        for nx, ny in nxt(x, y):
-            if (nx, ny) not in vis:
-                vis.add((nx, ny))
-                aa, bb = dp(nx, ny)
-                a = a or aa
-                b = b or bb
-        if (a, b) == (True, False):
-            ans.add((x, y))
-        return a, b
-
-    ans = set()
-    x, y = cin_int_ls()
-    mat = []
+    a, b = cin_int_ls()
     sx, sy = 0, 0
-    ex, ey = 0, 0
-    for yy in range(y):
+    tx, ty = 0, 0
+    for i in range(a):
         row = input()
         if row.find('S') != -1:
-            sx, sy = yy, row.find('S')
+            sx, sy = i, row.find('S')
         if row.find('T') != -1:
-            ex, ey = yy, row.find('T')
+            tx, ty = i, row.find('T')
         mat.append(row)
-    for x in range(len(mat)):
-        for y in range(len(mat[0])):
-            dp(x, y)
-    for x in range(len(mat)):
-        for y in range(len(mat[0])):
-            dp(x, y)
-    print(ans)
+    toS = {(sx, sy)}
+    dfs(sx, sy)
+    if (tx, ty) not in toS:
+        print("I'm stuck!")
+    toT = {(tx, ty)}
+    dfs2(tx, ty)
+    ans = toS - toT
+    print(len(ans))
 
 
 main()
-
-"""
-5 5
---+-+
-..|#.
-..|##
-S-+-T
-####.
-"""
