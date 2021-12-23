@@ -1,25 +1,61 @@
-from typing import *
-import random
+def rank(ls):
+    rk = [0 for _ in ls]
+    ls = [(v, i) for i, v in enumerate(ls)]
+    ls.sort()
+    pre = 0
+    for i in range(len(ls)):
+        r = i + 1
+        if ls[i - 1][0] == ls[i][0]:
+            r = pre
+        idx = ls[i][1]
+        rk[idx] = r
+        pre = r
+    return rk
 
 
-# Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+def suffix_array(s):
+    rk = rank(s)
+    skip = 1
+    while skip < len(s):
+        source = [[0, 0] for _ in s]
+        for i in range(len(s)):
+            source[i][0] = rk[i]
+            if i + skip < len(s):
+                source[i][1] = rk[i + skip]
+        rk = rank(source)
+        skip *= 2
+    sa = [0 for _ in s]
+    for i in range(len(s)):
+        sa[rk[i] - 1] = i
+    return sa, [i - 1 for i in rk]
 
 
-"""
-%% Definition for a binary tree node.
-%%
-%% -record(tree_node, {val = 0 :: integer(),
-%%                     left = null  :: 'null' | #tree_node{},
-%%                     right = null :: 'null' | #tree_node{}}).
+def height(s, sa, rk):
+    ht = [0] * len(sa)
+    k = 0
+    for sai in range(0, len(s)):
+        if k:
+            k -= 1
+        while True:
+            ai, bi = sai + k, sa[rk[sai] - 1] + k
+            if max(ai, bi) >= len(s):
+                break
+            elif s[ai] == s[bi]:
+                k += 1
+            else:
+                break
+        ht[rk[sai]] = k
+    return ht
 
--spec is_same_tree(P :: #tree_node{} | null, Q :: #tree_node{} | null) -> boolean().
-is_same_tree(#tree_node{val = V1,left=L1,right=R1}, #tree_node{val = V2,left=L2,right=R2})->
-    V1 =:= V2 andalso is_same_tree(L1,L2) andalso is_same_tree(R1,R2);
-     
-is_same_tree(A,B)->A=:=B;
-"""
+
+T = "aabbaa"
+sa, rk = suffix_array(T)
+print([i for i in sa], rk)
+for r in range(len(T)):
+    print(T[sa[r]:])
+
+ht = height(T, sa, rk)
+i = ht.index(max(ht))
+v = ht[i]
+print(ht)
+print(T[sa[i]:sa[i] + v])

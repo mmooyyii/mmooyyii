@@ -39,6 +39,10 @@ def ex_gcd(a, b):
     return pow(a, b - 2, b)
 
 
+a, b = 1000, 10
+print((a // b) % 23)
+
+
 def is_palindrome(n):
     n = str(n)
     for i in range(len(n) // 2):
@@ -460,6 +464,7 @@ def boyer_moore(pattern, text):
                     good = 0
                 break
             if search == 0:
+                print(index)
                 return True
         index += max(bad, good)
     return False
@@ -773,42 +778,6 @@ def q_pow(matrix, b):
     return ans
 
 
-def rank(ls):
-    rk = [0 for _ in ls]
-    ls = [(v, i) for i, v in enumerate(ls)]
-    ls.sort()
-    pre = 0
-    for i in range(len(ls)):
-        r = i
-        if ls[i - 1][0] == ls[i][0]:
-            r = pre
-        idx = ls[i][1]
-        rk[idx] = r
-        pre = r
-    return rk
-
-
-def suffix_array(s):
-    rk = rank(s)
-    skip = 1
-    while skip < len(s):
-        source = [[0, 0] for _ in s]
-        for i in range(len(s)):
-            source[i][0] = rk[i]
-            if i + skip < len(s):
-                source[i][1] = rk[i + skip]
-        rk = rank(source)
-        skip *= 2
-    sa = [0 for _ in s]
-    for i in range(len(s)):
-        sa[rk[i]] = i
-    return sa, rk
-
-
-sa, rk = suffix_array("ababa")
-print(*map(lambda x: x + 1, sa))
-
-
 # 数论分块
 def slow(n):
     ans = 0
@@ -924,3 +893,88 @@ def multi_source_bfs(start, g):
                 if nxt not in vis:
                     vis.add(nxt)
                     q.append(nxt)
+
+
+### 后缀数组
+
+def rank(ls):
+    rk = [0 for _ in ls]
+    ls = [(v, i) for i, v in enumerate(ls)]
+    ls.sort()
+    pre = 0
+    for i in range(len(ls)):
+        r = i + 1
+        if ls[i - 1][0] == ls[i][0]:
+            r = pre
+        idx = ls[i][1]
+        rk[idx] = r
+        pre = r
+    return rk
+
+
+def suffix_array(s):
+    rk = rank(s)
+    skip = 1
+    while skip < len(s):
+        source = [[0, 0] for _ in s]
+        for i in range(len(s)):
+            source[i][0] = rk[i]
+            if i + skip < len(s):
+                source[i][1] = rk[i + skip]
+        rk = rank(source)
+        skip *= 2
+    sa = [0 for _ in s]
+    for i in range(len(s)):
+        sa[rk[i] - 1] = i
+    return sa, [i - 1 for i in rk]
+
+
+def height(s, sa, rk):
+    ht = [0] * len(sa)
+    k = 0
+    for sai in range(0, len(s)):
+        if k:
+            k -= 1
+        while True:
+            ai, bi = sai + k, sa[rk[sai] - 1] + k
+            if max(ai, bi) >= len(s):
+                break
+            elif s[ai] == s[bi]:
+                k += 1
+            else:
+                break
+        ht[rk[sai]] = k
+    return ht
+
+
+sa, rk = suffix_array("ababa")
+print(*map(lambda x: x + 1, sa))
+
+
+def sub(pattern, text):
+    sa, rk = suffix_array(text)
+    print(sa, rk)
+    left, right = 0, len(text)
+    while left < right:
+        mid = (right + left) // 2
+        if text[sa[mid]:].startswith(pattern):
+            left = mid + 1
+            # right = mid
+        elif text[sa[mid]:] < pattern:
+            left = mid + 1
+        elif text[sa[mid]:] > pattern:
+            right = mid
+    upper = left
+    left, right = 0, len(text)
+    while left < right:
+        mid = (right + left) // 2
+        if text[sa[mid]:].startswith(pattern):
+            right = mid
+        elif text[sa[mid]:] < pattern:
+            left = mid + 1
+        elif text[sa[mid]:] > pattern:
+            right = mid
+    lower = left
+    for r in range(lower, upper):
+        print(text[sa[r]:])
+    return upper - lower
