@@ -17,7 +17,7 @@ def suffix_array(s):
     rk = rank(s)
     skip = 1
     while skip < len(s):
-        source = [[0, 0] for _ in s]
+        source = [[-1, -1] for _ in s]
         for i in range(len(s)):
             source[i][0] = rk[i]
             if i + skip < len(s):
@@ -48,14 +48,16 @@ def height(s, sa, rk):
     return ht
 
 
-T = "aabbaa"
-sa, rk = suffix_array(T)
-print([i for i in sa], rk)
-for r in range(len(T)):
-    print(T[sa[r]:])
+import time
 
+T = "zxcvdqkfawuytt"
+start = time.time()
+sa, rk = suffix_array(T)
+print(time.time() - start)
 ht = height(T, sa, rk)
 i = ht.index(max(ht))
 v = ht[i]
+print(sa, rk)
 print(ht)
 print(T[sa[i]:sa[i] + v])
+print(time.time() - start)

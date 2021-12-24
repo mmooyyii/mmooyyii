@@ -903,7 +903,7 @@ def rank(ls):
     ls.sort()
     pre = 0
     for i in range(len(ls)):
-        r = i + 1
+        r = i
         if ls[i - 1][0] == ls[i][0]:
             r = pre
         idx = ls[i][1]
@@ -916,7 +916,7 @@ def suffix_array(s):
     rk = rank(s)
     skip = 1
     while skip < len(s):
-        source = [[0, 0] for _ in s]
+        source = [[-1, -1] for _ in s]
         for i in range(len(s)):
             source[i][0] = rk[i]
             if i + skip < len(s):
@@ -925,8 +925,8 @@ def suffix_array(s):
         skip *= 2
     sa = [0 for _ in s]
     for i in range(len(s)):
-        sa[rk[i] - 1] = i
-    return sa, [i - 1 for i in rk]
+        sa[rk[i]] = i
+    return sa, rk
 
 
 def height(s, sa, rk):
@@ -937,6 +937,8 @@ def height(s, sa, rk):
             k -= 1
         while True:
             ai, bi = sai + k, sa[rk[sai] - 1] + k
+            if not (0 <= ai < len(s) and 0 <= bi < len(s)):
+                break
             if max(ai, bi) >= len(s):
                 break
             elif s[ai] == s[bi]:
