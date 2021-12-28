@@ -1,63 +1,43 @@
-def rank(ls):
-    rk = [0 for _ in ls]
-    ls = [(v, i) for i, v in enumerate(ls)]
-    ls.sort()
-    pre = 0
-    for i in range(len(ls)):
-        r = i + 1
-        if ls[i - 1][0] == ls[i][0]:
-            r = pre
-        idx = ls[i][1]
-        rk[idx] = r
-        pre = r
-    return rk
+class Solution:
+    def abbreviateProduct(self, left: int, right: int) -> str:
 
-
-def suffix_array(s):
-    rk = rank(s)
-    skip = 1
-    while skip < len(s):
-        source = [[-1, -1] for _ in s]
-        for i in range(len(s)):
-            source[i][0] = rk[i]
-            if i + skip < len(s):
-                source[i][1] = rk[i + skip]
-        rk = rank(source)
-        skip *= 2
-    sa = [0 for _ in s]
-    for i in range(len(s)):
-        sa[rk[i] - 1] = i
-    return sa, [i - 1 for i in rk]
-
-
-def height(s, sa, rk):
-    ht = [0] * len(sa)
-    k = 0
-    for sai in range(0, len(s)):
-        if k:
-            k -= 1
-        while True:
-            ai, bi = sai + k, sa[rk[sai] - 1] + k
-            if max(ai, bi) >= len(s):
-                break
-            elif s[ai] == s[bi]:
-                k += 1
+        if right - left < 100:
+            ans = 1
+            for i in range(left, right + 1):
+                ans *= i
+            ans = str(ans)
+            tmp = ans.strip('0')
+            zero = len(ans) - len(tmp)
+            if len(tmp) <= 10:
+                ans = tmp + "e" + str(zero)
             else:
-                break
-        ht[rk[sai]] = k
-    return ht
+                ans = tmp[:5] + "..." + tmp[-5:] + "e" + str(zero)
+            return ans
+
+        def five(n):
+            ans = 0
+            while n % 5 == 0:
+                n //= 5
+                ans += 1
+            return ans
+
+        zero = 0
+        for n in range(left, right + 1):
+            zero += five(n)
+        prefix = 1
+        for n in range(left, right + 1):
+            prefix *= n
+            prefix = int(str(prefix)[:80])
+
+        suffix = 1
+        for n in range(left, right + 1):
+            suffix *= n
+            suffix = int(str(suffix).rstrip('0')[-20:])
+        return str(prefix)[:5] + "..." + str(suffix)[-5:] + "e" + str(zero)
 
 
-import time
-
-T = "zxcvdqkfawuytt"
-start = time.time()
-sa, rk = suffix_array(T)
-print(time.time() - start)
-ht = height(T, sa, rk)
-i = ht.index(max(ht))
-v = ht[i]
-print(sa, rk)
-print(ht)
-print(T[sa[i]:sa[i] + v])
-print(time.time() - start)
+print(Solution().abbreviateProduct(6, 563035))
+print(Solution().abbreviateProduct(18, 237575))
+print(Solution().abbreviateProduct(3940, 836328))
+print(Solution().abbreviateProduct(2965, 574229))
+print(Solution().abbreviateProduct(6148, 215373))

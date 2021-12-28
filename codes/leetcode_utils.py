@@ -961,7 +961,6 @@ def sub(pattern, text):
         mid = (right + left) // 2
         if text[sa[mid]:].startswith(pattern):
             left = mid + 1
-            # right = mid
         elif text[sa[mid]:] < pattern:
             left = mid + 1
         elif text[sa[mid]:] > pattern:
@@ -980,3 +979,6 @@ def sub(pattern, text):
     for r in range(lower, upper):
         print(text[sa[r]:])
     return upper - lower
+
+
+print(sub("ana", "banana"))
