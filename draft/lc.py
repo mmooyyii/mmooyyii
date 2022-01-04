@@ -1,43 +1,52 @@
+from typing import *
+
+import sys
+
+sys.setrecursionlimit(int(2e9))
+
+
 class Solution:
-    def abbreviateProduct(self, left: int, right: int) -> str:
+    def catMouseGame(self, graph: List[List[int]]) -> int:
 
-        if right - left < 100:
-            ans = 1
-            for i in range(left, right + 1):
-                ans *= i
-            ans = str(ans)
-            tmp = ans.strip('0')
-            zero = len(ans) - len(tmp)
-            if len(tmp) <= 10:
-                ans = tmp + "e" + str(zero)
-            else:
-                ans = tmp[:5] + "..." + tmp[-5:] + "e" + str(zero)
-            return ans
+        memo = {}
 
-        def five(n):
+        def dp(maomao, shushu, pos, depth=0):
+            key = (maomao, shushu, pos)
+            if key in memo:
+                return memo[key]
+            if depth > 1000:
+                return 0
+            if shushu == 0:
+                return 1
+            if maomao == shushu:
+                return 2
             ans = 0
-            while n % 5 == 0:
-                n //= 5
-                ans += 1
+            if pos == 0:
+                tmp = set()
+                for nxt in graph[shushu]:
+                    tmp.add(dp(maomao, nxt, 1 - pos, depth + 1))
+                if 1 in tmp:
+                    ans = 1
+                elif 0 in tmp:
+                    ans = 0
+                else:
+                    ans = 2
+            else:
+                tmp = set()
+                for nxt in graph[maomao]:
+                    if nxt != 0:
+                        tmp.add(dp(nxt, shushu, 1 - pos, depth + 1))
+                if 2 in tmp:
+                    ans = 2
+                elif 0 in tmp:
+                    ans = 0
+                else:
+                    ans = 1
+            memo[key] = ans
             return ans
 
-        zero = 0
-        for n in range(left, right + 1):
-            zero += five(n)
-        prefix = 1
-        for n in range(left, right + 1):
-            prefix *= n
-            prefix = int(str(prefix)[:80])
-
-        suffix = 1
-        for n in range(left, right + 1):
-            suffix *= n
-            suffix = int(str(suffix).rstrip('0')[-20:])
-        return str(prefix)[:5] + "..." + str(suffix)[-5:] + "e" + str(zero)
+        return dp(2, 1, 0)
 
 
-print(Solution().abbreviateProduct(6, 563035))
-print(Solution().abbreviateProduct(18, 237575))
-print(Solution().abbreviateProduct(3940, 836328))
-print(Solution().abbreviateProduct(2965, 574229))
-print(Solution().abbreviateProduct(6148, 215373))
+a = Solution().catMouseGame([[5, 6], [3, 4], [6], [1, 4, 5], [1, 3, 5], [0, 3, 4, 6], [0, 2, 5]])
+print(a)

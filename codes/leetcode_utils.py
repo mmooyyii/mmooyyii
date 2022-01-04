@@ -157,7 +157,6 @@ class SkipList:
     """
 
     def __init__(self):
-
         self.high = 1
         self.root = SkipListNode()
         self.kv = {}
@@ -923,6 +922,7 @@ def suffix_array(s):
                 source[i][1] = rk[i + skip]
         rk = rank(source)
         skip *= 2
+        print(skip)
     sa = [0 for _ in s]
     for i in range(len(s)):
         sa[rk[i]] = i
@@ -949,13 +949,8 @@ def height(s, sa, rk):
     return ht
 
 
-sa, rk = suffix_array("ababa")
-print(*map(lambda x: x + 1, sa))
-
-
 def sub(pattern, text):
     sa, rk = suffix_array(text)
-    print(sa, rk)
     left, right = 0, len(text)
     while left < right:
         mid = (right + left) // 2
@@ -976,9 +971,20 @@ def sub(pattern, text):
         elif text[sa[mid]:] > pattern:
             right = mid
     lower = left
+    print(lower, upper)
     for r in range(lower, upper):
         print(text[sa[r]:])
     return upper - lower
 
 
-print(sub("ana", "banana"))
+def draw_graph(edges):
+    edges = [list(map(str, edge)) for edge in edges]
+    import networkx as nx
+    import matplotlib.pyplot as plt
+    G = nx.DiGraph()
+    G.add_edges_from(edges)
+    pos = nx.spring_layout(G)
+    nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'), node_size=500)
+    nx.draw_networkx_labels(G, pos)
+    nx.draw_networkx_edges(G, pos)
+    plt.show()
