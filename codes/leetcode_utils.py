@@ -978,13 +978,14 @@ def sub(pattern, text):
 
 
 def draw_graph(edges):
-    edges = [list(map(str, edge)) for edge in edges]
     import networkx as nx
     import matplotlib.pyplot as plt
+    edges = [list(map(str, edge)) for edge in edges]
     G = nx.DiGraph()
-    G.add_edges_from(edges)
+    for i, v in enumerate(edges):
+        a, b = v
+        G.add_edge(a, b, id=i + 1)
     pos = nx.spring_layout(G)
     nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'), node_size=500)
-    nx.draw_networkx_labels(G, pos)
-    nx.draw_networkx_edges(G, pos)
+    nx.draw(G, pos, with_labels=True, connectionstyle='arc3, rad = 0.1')
     plt.show()
