@@ -35,7 +35,7 @@
 
 - [ ] ebpf
 - [ ] 图数据库
-- [ ] disruptor
+- [x] disruptor
 - [ ] llvm
 - [ ] 汇编
 - [ ] k8s CRI
