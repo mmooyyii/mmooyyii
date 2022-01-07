@@ -37,7 +37,6 @@ func (stack *CasStack) Push(value interface{}) {
 		node.next = oldValue
 		newValue := unsafe.Pointer(node)
 		if atomic.CompareAndSwapPointer(&stack.Top, oldValue, newValue) {
-			
 			atomic.AddInt64(&stack.size, 1)
 			return
 		}
