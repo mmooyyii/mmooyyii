@@ -60,38 +60,20 @@ func (stack *CasStack) Pop() interface{} {
 func main() {
 	stack := NewCasStack()
 	wg := sync.WaitGroup{}
-	wg.Add(4)
-	go func() {
-		for i := 0; i < 100; i++ {
-			stack.Push(i)
-			stack.Pop()
-		}
-		wg.Done()
-	}()
-	go func() {
-		for i := 0; i < 100; i++ {
-			stack.Push(i)
-			stack.Pop()
-		}
-		wg.Done()
-	}()
-	go func() {
-		for i := 0; i < 100; i++ {
-			stack.Push(i)
-			stack.Pop()
-		}
-		wg.Done()
-	}()
-	go func() {
-		for i := 0; i < 100; i++ {
-			stack.Push(i)
-			stack.Pop()
-		}
-		wg.Done()
-	}()
+	for i := 0; i < 100; i++ {
+		wg.Add(1)
+		go func() {
+			for i := 0; i < 100; i++ {
+				stack.Push(i)
+				stack.Pop()
+			}
+			wg.Done()
+		}()
+	}
 	wg.Wait()
 	fmt.Println(stack.size)
 	fmt.Println(stack)
 }
+
 ```
 
