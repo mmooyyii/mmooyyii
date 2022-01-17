@@ -39,8 +39,13 @@ def ex_gcd(a, b):
     return pow(a, b - 2, b)
 
 
-a, b = 1000, 10
-print((a // b) % 23)
+b = 7249017203 * 129301832
+a = 7249017203
+p = int(1e9) + 7
+
+a1 = ex_gcd(a, p)
+
+print((b // a) % p, (b * a1) % p
 
 
 def is_palindrome(n):
