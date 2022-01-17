@@ -34,9 +34,9 @@ func (stack *CasStack) Push(value interface{}) {
 	for {
 		node := NewNode(value)
 		oldValue := stack.Top
+		node.next = oldValue
 		newValue := unsafe.Pointer(node)
 		if atomic.CompareAndSwapPointer(&stack.Top, oldValue, newValue) {
-			node.next = oldValue
 			atomic.AddInt64(&stack.size, 1)
 			return
 		}
@@ -60,38 +60,20 @@ func (stack *CasStack) Pop() interface{} {
 func main() {
 	stack := NewCasStack()
 	wg := sync.WaitGroup{}
-	wg.Add(4)
-	go func() {
-		for i := 0; i < 100; i++ {
-			stack.Push(i)
-			stack.Pop()
-		}
-		wg.Done()
-	}()
-	go func() {
-		for i := 0; i < 100; i++ {
-			stack.Push(i)
-			stack.Pop()
-		}
-		wg.Done()
-	}()
-	go func() {
-		for i := 0; i < 100; i++ {
-			stack.Push(i)
-			stack.Pop()
-		}
-		wg.Done()
-	}()
-	go func() {
-		for i := 0; i < 100; i++ {
-			stack.Push(i)
-			stack.Pop()
-		}
-		wg.Done()
-	}()
+	for i := 0; i < 100; i++ {
+		wg.Add(1)
+		go func() {
+			for i := 0; i < 100; i++ {
+				stack.Push(i)
+				stack.Pop()
+			}
+			wg.Done()
+		}()
+	}
 	wg.Wait()
 	fmt.Println(stack.size)
 	fmt.Println(stack)
 }
+
 ```
 
