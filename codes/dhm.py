@@ -1,4 +1,6 @@
 # 迪菲-赫尔曼密钥交换流程
+import random
+
 
 def eve(func):
     def _func(*args):
@@ -6,7 +8,7 @@ def eve(func):
         for i in args:
             if type(i) == int:
                 ans.append(i)
-        print("eve knows ", ans)
+        print("eve knows", *ans)
         return func(*args)
 
     return _func
@@ -34,14 +36,14 @@ class Peer:
             self.secret = pow(self.recv_number, self.send_number, p)
 
 
-p = 23
-g = 5
+p = int(1e9) + 7
+g = 1665161446161321
 
 Alice = Peer()
 Bob = Peer()
 
-Alice.send(Bob, 6)
-Bob.send(Alice, 15)
+Alice.send(Bob, random.randint(1, 1010101010))
+Bob.send(Alice, random.randint(1, 1010101010))
 
 print("alice secret is", Alice.secret)
 print("bob secret is", Bob.secret)
