@@ -3,7 +3,7 @@
 """
 """
 # 绝对值展开，也许可以简化计算
-# abs(a-b) + abs(c-disruptor.go) = max{a-b + (c-disruptor.go),-a+b + (c-disruptor.go),a-b + (-c+disruptor.go),-a+b + (-c+disruptor.go)}
+# abs(a-b) + abs(c-d) = max{a-b + (c-d),-a+b + (c-d),a-b + (-c+d),-a+b + (-c+d)}
 
 # 验证答案需要O(n)的情况下，考虑使用二分法
 # 离线查询的情况下，记得可以调整查询的顺序
@@ -37,16 +37,13 @@ setrecursionlimit(int(1e9))
 
 def ex_gcd(a, b):
     return pow(a, b - 2, b)
-
-
 b = 7249017203 * 129301832
 a = 7249017203
 p = int(1e9) + 7
 
 a1 = ex_gcd(a, p)
 
-print((b // a) % p, (b * a1) % p
-
+print((b // a) % p, (b * a1) % p)
 
 def is_palindrome(n):
     n = str(n)
