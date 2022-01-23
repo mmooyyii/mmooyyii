@@ -54,6 +54,18 @@ def is_palindrome(n):
             return False
     return True
 
+def next_palindrome(x):
+    x = str(x)
+    if x == '9' * len(x):
+        return int('1' + '0' * (len(x) - 1) + '1')
+    if len(x) & 1:
+        half = int(x[:len(x) // 2 + 1])
+        half = str(half + 1)
+        return int(half + half[:-1][::-1])
+    else:
+        half = int(x[:len(x) // 2])
+        half = str(half + 1)
+        return int(half + half[::-1])
 
 def binary_search_lte(target: int, ls: list) -> int:
     # 返回小于等于target的个数
