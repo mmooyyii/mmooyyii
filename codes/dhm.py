@@ -42,8 +42,8 @@ g = 1665161446161321
 Alice = Peer()
 Bob = Peer()
 
-Alice.send(Bob, random.randint(1, 1010101010))
-Bob.send(Alice, random.randint(1, 1010101010))
+Alice.send(Bob, random.randint(1, 48516168476161986476984))
+Bob.send(Alice, random.randint(1, 48516168476161986476984))
 
 print("alice secret is", Alice.secret)
 print("bob secret is", Bob.secret)

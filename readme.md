@@ -20,7 +20,7 @@
     - [利用泰勒展开式写配置文件](docs/algorithm/taylor.md)
     - [LeetCode常用函数](codes/leetcode_utils.py)
 - 操作系统/网络:
-    - [对长连接服务热更新](https://github.com/mmooyyii/mmooyyii/tree/master/codes/share_socket)
+    - [对长连接服务热更新](codes/share_socket)
     - [一天学一个syscall](docs/os/syscall.md)
     - [迪菲-赫尔曼密钥交换流程](codes/dhm.py)
 - 运维:
