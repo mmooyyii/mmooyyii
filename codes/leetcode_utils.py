@@ -1003,3 +1003,14 @@ def draw_graph(edges):
     nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'), node_size=500)
     nx.draw(G, pos, with_labels=True, connectionstyle='arc3, rad = 0.1')
     plt.show()
+
+def mex(ls):
+    ans = []
+    vis = set()
+    tmp = 0
+    for i in ls:
+        vis.add(i)
+        while tmp in vis:
+            tmp += 1
+        ans.append(tmp)
+    return ans
