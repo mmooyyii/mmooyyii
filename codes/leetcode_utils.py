@@ -20,6 +20,7 @@ a ^ b = c
 
 a + b = (a & b) + (a | b)
 
+
 逆元
 
 ax === 1 (mod b)
@@ -37,6 +38,8 @@ setrecursionlimit(int(1e9))
 
 def ex_gcd(a, b):
     return pow(a, b - 2, b)
+
+
 b = 7249017203 * 129301832
 a = 7249017203
 p = int(1e9) + 7
@@ -44,6 +47,7 @@ p = int(1e9) + 7
 a1 = ex_gcd(a, p)
 
 print((b // a) % p, (b * a1) % p)
+
 
 def is_palindrome(n):
     n = str(n)
@@ -54,18 +58,6 @@ def is_palindrome(n):
             return False
     return True
 
-def next_palindrome(x):
-    x = str(x)
-    if x == '9' * len(x):
-        return int('1' + '0' * (len(x) - 1) + '1')
-    if len(x) & 1:
-        half = int(x[:len(x) // 2 + 1])
-        half = str(half + 1)
-        return int(half + half[:-1][::-1])
-    else:
-        half = int(x[:len(x) // 2])
-        half = str(half + 1)
-        return int(half + half[::-1])
 
 def binary_search_lte(target: int, ls: list) -> int:
     # 返回小于等于target的个数
@@ -1004,13 +996,30 @@ def draw_graph(edges):
     nx.draw(G, pos, with_labels=True, connectionstyle='arc3, rad = 0.1')
     plt.show()
 
-def mex(ls):
-    ans = []
-    vis = set()
-    tmp = 0
+
+def kanade(ls):
+    # 最小子数组
+    # print(kanade([-3, -2 - 3]))
+    ans = -int(1e9)
+    pre = -int(1e9)
     for i in ls:
-        vis.add(i)
-        while tmp in vis:
-            tmp += 1
-        ans.append(tmp)
+        pre = max(i, i + pre)
+        ans = max(ans, pre)
     return ans
+
+
+def matrix_pre_sum(data):
+    # 矩阵前缀和
+    ans = [[0 for _ in range(len(data) + 2)] for _ in range(len(data) + 1)]
+    for x in range(len(data)):
+        tmp = 0
+        for y in range(len(data[0])):
+            tmp += data[x][y]
+            ans[x][y] = tmp + ans[x - 1][y]
+
+    return ans
+
+
+def get_sub_matrix(pre, x1, y1, x2, y2):
+    # 2边都能取到
+    return pre[x2][y2] + pre[x1 - 1][y1 - 1] - pre[x2][y1 - 1] - pre[x1 - 1][y2]
