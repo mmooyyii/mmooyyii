@@ -1010,7 +1010,7 @@ def kanade(ls):
 
 def matrix_pre_sum(data):
     # 矩阵前缀和
-    ans = [[0 for _ in range(len(data) + 2)] for _ in range(len(data) + 1)]
+    ans = [[0 for _ in range(len(data[0]) + 1)] for _ in range(len(data) + 1)]
     for x in range(len(data)):
         tmp = 0
         for y in range(len(data[0])):
