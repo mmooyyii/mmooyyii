@@ -44,7 +44,7 @@
 - [ ] k8s CRI
 - [ ] 线性代数复习最后亿次
 - [ ] React
-- [ ] Leetcode上2500分(2471/2500)
+- [x] Leetcode上2500分(2500/2500)
 - [ ] 看 <<数据库系统实现>>
 - [ ] 写一个[简单的数据库](https://github.com/mmooyyii/practise_db)
 
