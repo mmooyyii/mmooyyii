@@ -59,6 +59,20 @@ def is_palindrome(n):
     return True
 
 
+def next_palindrome(x):
+    x = str(x)
+    if x == '9' * len(x):
+        return int('1' + '0' * (len(x) - 1) + '1')
+    if len(x) & 1:
+        half = int(x[:len(x) // 2 + 1])
+        half = str(half + 1)
+        return int(half + half[:-1][::-1])
+    else:
+        half = int(x[:len(x) // 2])
+        half = str(half + 1)
+        return int(half + half[::-1])
+
+
 def binary_search_lte(target: int, ls: list) -> int:
     # 返回小于等于target的个数
     left, right = 0, len(ls)
@@ -1016,7 +1030,6 @@ def matrix_pre_sum(data):
         for y in range(len(data[0])):
             tmp += data[x][y]
             ans[x][y] = tmp + ans[x - 1][y]
-
     return ans
 
 
@@ -1024,6 +1037,17 @@ def get_sub_matrix(pre, x1, y1, x2, y2):
     # 2边都能取到
     return pre[x2][y2] + pre[x1 - 1][y1 - 1] - pre[x2][y1 - 1] - pre[x1 - 1][y2]
 
+
+def mex(ls):
+    ans = []
+    vis = set()
+    tmp = 0
+    for i in ls:
+        vis.add(i)
+        while tmp in vis:
+            tmp += 1
+        ans.append(tmp)
+    return ans
 
 
 class KM:
@@ -1038,6 +1062,7 @@ class KM:
         self.lx = [max(row) for row in graph]
         self.ly = [0] * ma
         self.slack = []
+        self.fa = []
 
         self.nx, self.ny = len(graph), len(graph[0])
 
@@ -1049,33 +1074,53 @@ class KM:
             tmp_delta = self.lx[x] + self.ly[y] - self.graph[x][y]
             if tmp_delta == 0:
                 self.vis_y.add(y)
-                if self.match[y] == -1 or self.find_path(self.match[y]):
-                    self.match[y] = x
-                    return True
-            elif self.slack[y] > tmp_delta:
-                self.slack[y] = tmp_delta
-        return False
+                self.fa[y + self.nx] = x
+                if self.match[y] == -1:
+                    return y + self.nx
+                self.fa[self.match[y]] = y + self.nx
+                res = self.find_path(self.match[y])
+                if res > 0:
+                    return res
+            elif self.slack[x] > tmp_delta:
+                self.slack[x] = tmp_delta
+
+        return -1
 
     def solve(self):
         for x in range(self.nx):
-            self.slack = [KM.INF] * self.ny
+            self.slack = [KM.INF] * self.nx
+            self.fa = [-1] * (self.nx + self.ny)
+            self.vis_x.clear()
+            self.vis_y.clear()
+            fir = 1
+            leaf = -1
             while True:
-                self.vis_x.clear()
-                self.vis_y.clear()
-                if self.find_path(x):
+                if fir == 1:
+                    leaf = self.find_path(x)
+                    fir = 0
+                else:
+                    for i in range(self.nx):
+                        if self.slack[i] == 0:
+                            self.slack[i] = KM.INF
+                            leaf = self.find_path(i)
+                            if leaf > 0:
+                                break
+                if leaf > 0:
+                    p = leaf
+                    while p > 0:
+                        self.match[p - self.nx] = self.fa[p]
+                        p = self.fa[self.fa[p]]
                     break
                 else:
                     delta = KM.INF
-                    for j in range(self.ny):
-                        if j not in self.vis_y and delta > self.slack[j]:
-                            delta = self.slack[j]
+                    for i in range(self.nx):
+                        if i in self.vis_x and delta > self.slack[i]:
+                            delta = self.slack[i]
                     for i in range(self.nx):
                         if i in self.vis_x:
                             self.lx[i] -= delta
+                            self.slack[i] -= delta
                     for j in range(self.ny):
                         if j in self.vis_y:
                             self.ly[j] += delta
-                        else:
-                            self.slack[j] -= delta
-
         return self.match
