@@ -1,7 +1,7 @@
 ### 安全地关闭MPMC(multi-producer multi-consumer) channel
 
 
-向一个以及关闭的channel中写数据会导致panic, 所以关闭channel前, 必须停止所有生产者.
+向一个已经关闭的channel中写数据会导致panic, 所以关闭channel前, 必须停止所有生产者.  
 我们采用投票表决的方式(一定会同意),等全体同意后再关闭channel的方式关闭MPMC channel.
 下面是示例代码
 
