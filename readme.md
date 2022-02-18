@@ -9,6 +9,7 @@
         - [国庆看minio代码](docs/go/minio.md)
         - [使用coredump解决生产环境的bug](docs/go/使用coredump解决生产环境的bug.md)
         - [CompareAndSwap Stack](docs/go/cas_stack.md)
+        - [安全地关闭MPMC channel](docs/go/mpmc_channel.md)
 - 机翻系列:
     - BeamBook翻译:
         - [Part I:ERTS](docs/erlang/beambook/ERTS_1.md)
