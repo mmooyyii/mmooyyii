@@ -14,7 +14,7 @@
     - BeamBook翻译:
         - [Part I:ERTS](docs/erlang/beambook/ERTS_1.md)
     - [GoMonkey原理(来自作者博客)](docs/doc/gomonkey.md)
-    - [rfc7413 TCP Fast Open](docs/network/rfc7413.pdf)
+    - [rfc7413 TCP Fast Open](docs/network/rfc7413.md)
 - 算法/数据结构:
     - [日期与时间戳](docs/algorithm/timestamp.md)
     - [退火算法](docs/algorithm/sa.md)
