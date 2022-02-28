@@ -1124,3 +1124,12 @@ class KM:
                         if j in self.vis_y:
                             self.ly[j] += delta
         return self.match
+
+
+class Node:
+
+    def __init__(self, val):
+        self.val = val
+        self.nxt = set()
+
+
