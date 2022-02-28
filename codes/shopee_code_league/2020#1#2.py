@@ -70,7 +70,9 @@ class KarpRabin:
 
 
 def solve2():
-    # 时间复杂度O(11 * N), 空间复杂度有点难算, 应该比O(121 * N)小.
+    # N是总字符数
+    # 时间复杂度O(11 * N)
+    # 空间复杂度: 最坏情况下,每个商品名10个空格,单词的长度是4或5,而且每个都不同,最多14000个商品, 需要14000 * 121个int
     from collections import Counter
     for _ in range(cin_int()):
         n, q = cin_int_ls()
