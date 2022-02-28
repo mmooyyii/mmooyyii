@@ -25,7 +25,7 @@ def dp(idx, n, pre, self):  # 前一个和自己有没有被买
     ans = dp(idx + 1, n, self, False)  # 不买
     if pre and self:
         if idx == len(prices) - 1:
-            ans = min(ans, dp(idx + 1, n, True, True))  # 没有下一台服务了
+            ans = min(ans, dp(idx + 1, n, True, True))  # 没有下一台服务器了
         else:
             ans = min(ans, dp(idx + 1, n - 1, True, True))  # 买了送下一台服务器
     elif pre and not self:
