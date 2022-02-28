@@ -403,54 +403,35 @@ def dijkstra(start, end, g):
 
 
 class KarpRabin:
-    big_primes = [16777619, 17]
+    big_primes = [16777619]
     maxInt = 1 << 32
+    to_int = ord
 
-    def __init__(self, string, n):
-        if n > len(string):
-            raise ValueError
-        self.length = 0
+    def __init__(self):
+        from collections import deque
         self.hash = [0 for _ in KarpRabin.big_primes]
-        self.s = string
-        self.n = n
-        self.to_int = int
-        self.sub_memo = {}
-        for char in string[:n]:
-            self.add_tail(char)
+        self.string = deque()
 
-    def add_tail(self, char):
+    def append(self, char):
         for i in range(len(KarpRabin.big_primes)):
-            self.hash[i] *= KarpRabin.big_primes[i]
-            self.hash[i] += self.to_int(char)
-            self.hash[i] %= KarpRabin.maxInt
-        self.length += 1
+            self.hash[i] = ((self.hash[i] * KarpRabin.big_primes[i]) + KarpRabin.to_int(char)) % KarpRabin.maxInt
+        self.string.append(char)
+        return self
 
-    def sub_head(self, char):
+    def extend(self, string):
+        for char in string:
+            self.append(char)
+        return self
+
+    def popleft(self):
+        char = self.string.popleft()
         for i in range(len(KarpRabin.big_primes)):
-            key = (self.length - 1, i)
-            if key in self.sub_memo:
-                sub = self.sub_memo[key]
-            else:
-                sub = 1
-                for _ in range(self.length - 1):
-                    sub *= KarpRabin.big_primes[i]
-                    sub %= KarpRabin.maxInt
-                self.sub_memo[key] = sub
-            sub *= self.to_int(char)
-            sub %= KarpRabin.maxInt
-            self.hash[i] += KarpRabin.maxInt
-            self.hash[i] -= sub
+            self.hash[i] -= pow(KarpRabin.big_primes[i], len(self.string), KarpRabin.maxInt) * KarpRabin.to_int(char)
             self.hash[i] %= KarpRabin.maxInt
-        self.length -= 1
+        return self
 
-    def scan(self):
-        yield tuple(self.hash)
-        for i in range(len(self.s) - self.n):
-            tail = self.s[i + self.n]
-            self.add_tail(tail)
-            head = self.s[i]
-            self.sub_head(head)
-            yield tuple(self.hash)
+    def hash_value(self):
+        return tuple(self.hash)
 
 
 # python 的 str() in str() 也是O(n)
@@ -1131,5 +1112,3 @@ class Node:
     def __init__(self, val):
         self.val = val
         self.nxt = set()
-
-

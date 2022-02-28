@@ -52,5 +52,5 @@ def solve2():
             print(len(ans))
 
 
-solve1()
+# solve1()
 solve2()
