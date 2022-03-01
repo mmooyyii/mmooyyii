@@ -14,7 +14,7 @@ def cin_int():
 
 
 # https://www.luogu.com.cn/problem/solution/P3402
-# 这么难?
+# 可持久化并查集, 这么难?
 
 
 class PersistentUnionSet:
