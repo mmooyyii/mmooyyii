@@ -12,4 +12,11 @@ def cin_int_ls():
 def cin_int():
     return int(input())
 
-# 看不懂题目
+
+class KDTree:
+
+    def __init__(self):
+        pass
+
+# 又是模板? 找最近的Geo,最近的Air,然后根据题意判断.
+
