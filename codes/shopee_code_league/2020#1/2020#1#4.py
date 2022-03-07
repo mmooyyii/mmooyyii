@@ -16,9 +16,7 @@ def cin_int():
 from functools import lru_cache
 
 
-# 扫描线dp
-
-
+# 扫描线dp O(2^3 * n * k)
 
 @lru_cache(None)
 def dp(baseline, a, b, c, k):
