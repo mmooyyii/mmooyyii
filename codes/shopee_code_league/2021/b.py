@@ -1,4 +1,5 @@
 import sys
+from sortedcontainers import SortedList
 
 
 def input():
@@ -12,5 +13,22 @@ def cin_int_ls():
 def cin_int():
     return int(input())
 
-# 如果混合后的咖啡浓度大于k, 其中至少有一个咖啡豆的浓度大于等于k
-# 整体做法是不断地合并区间
+
+# https://codeforces.com/blog/entry/87287
+
+n, k = cin_int_ls()
+ls = cin_int_ls()
+ls = [i - k for i in ls]
+
+sl = SortedList()
+ans = 0
+pre = 0
+for i in ls:
+    if i >= 0:
+        ans += 1
+    pre += i
+    rk = sl.bisect_left(pre)
+    ans += len(sl) - rk
+    sl.add(pre)
+
+print(ans)

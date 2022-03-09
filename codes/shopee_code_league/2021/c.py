@@ -28,5 +28,3 @@ for _ in range(n_warehouse):
 custom = []
 for _ in range(cin_int()):
     n, city = cin_int_ls()
-
-# 网络流? 不太会,要去学习一下
