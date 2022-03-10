@@ -20,15 +20,13 @@ n, k = cin_int_ls()
 ls = cin_int_ls()
 ls = [i - k for i in ls]
 
-sl = SortedList()
 ans = 0
-pre = 0
+pre = [0]
 for i in ls:
-    if i >= 0:
-        ans += 1
-    pre += i
-    rk = sl.bisect_left(pre)
-    ans += len(sl) - rk
-    sl.add(pre)
-
+    pre.append(pre[-1] + i)
+sl = SortedList()
+sl.add(0)
+for i in pre[1:]:
+    ans += sl.bisect_right(i)
+    sl.add(i)
 print(ans)
