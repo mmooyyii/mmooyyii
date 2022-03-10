@@ -14,29 +14,39 @@ def cin_int():
 
 
 n, k = cin_int_ls()
+k -= 1
 ls = cin_int_ls()
 
 
 def check(threshold):
-    a, b = 1, 1
+    for i in ls:
+        if i > threshold:
+            return int(2e9), 0
+
+    a, b = 0, 0
     need = 0
+    count = 0
     for i in ls:
         if (a + i) * (b + 1) > threshold:
+            count += a * b
             a = i
             b = 1
             need += 1
         else:
             a += i
             b += 1
-    return need <= k
+
+    count += a * b
+    return need, count
+
 
 # 2分答案， 感觉挺对的
-left, right = 0, 1 << 64
+left, right = 1, 1 << 64
 while left < right:
     mid = (right + left) // 2
-    if check(mid):
+    if check(mid)[0] <= k:
         right = mid
     else:
         left = mid + 1
 
-print(left * k)
+print(check(left)[1])
