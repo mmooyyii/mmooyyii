@@ -1,0 +1,51 @@
+从linux中一个常见的命令ulimit开始
+
+ulimit --help
+
+```
+  ulimit: ulimit [-SHabcdefiklmnpqrstuvxPT] [limit]
+    Modify shell resource limits.
+
+    Provides control over the resources available to the shell and processes
+    it creates, on systems that allow such control.
+
+    Options:
+      -S        use the `soft' resource limit
+      -H        use the `hard' resource limit
+      -a        all current limits are reported
+      -b        the socket buffer size
+      -c        the maximum size of core files created
+      -d        the maximum size of a process's data segment
+      -e        the maximum scheduling priority (`nice')
+      -f        the maximum size of files written by the shell and its children
+      -i        the maximum number of pending signals
+      -k        the maximum number of kqueues allocated for this process
+      -l        the maximum size a process may lock into memory
+      -m        the maximum resident set size
+      -n        the maximum number of open file descriptors
+      -p        the pipe buffer size
+      -q        the maximum number of bytes in POSIX message queues
+      -r        the maximum real-time scheduling priority
+      -s        the maximum stack size
+      -t        the maximum amount of cpu time in seconds
+      -u        the maximum number of user processes
+      -v        the size of virtual memory
+      -x        the maximum number of file locks
+      -P        the maximum number of pseudoterminals
+      -T        the maximum number of threads
+
+    Not all options are available on all platforms.
+
+    If LIMIT is given, it is the new value of the specified resource; the
+    special LIMIT values `soft', `hard', and `unlimited' stand for the
+    current soft limit, the current hard limit, and no limit, respectively.
+    Otherwise, the current value of the specified resource is printed.  If
+    no option is given, then -f is assumed.
+
+    Values are in 1024-byte increments, except for -t, which is in seconds,
+    -p, which is in increments of 512 bytes, and -u, which is an unscaled
+    number of processes.
+
+    Exit Status:
+    Returns success unless an invalid option is supplied or an error occurs.
+```
