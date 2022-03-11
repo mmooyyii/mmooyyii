@@ -41,6 +41,7 @@ a = floyd(n_city + 1, graph)
 for i in a:
     print(i)
 
+ware = Counter()
 for _ in range(n_warehouse):
     dto, fee, city = cin_int_ls()
 
