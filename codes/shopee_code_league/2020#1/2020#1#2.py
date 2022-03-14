@@ -13,27 +13,6 @@ def cin_int():
     return int(input())
 
 
-# 1 ≤ N ≤ 104
-# 1 ≤ Q ≤ 104
-# 字符总长度 < 7 * 105
-# 看其他题的排版是正常的,应该就是这个数据量吧????
-# 但是是不是太过简单了?
-
-def solve1():
-    for _ in range(cin_int()):
-        n, q = cin_int_ls()
-        items = []
-        for _ in range(n):
-            items.append(" " + input() + " ")
-        for _ in range(q):
-            pattern = " " + input() + " "
-            ans = 0
-            for i in items:
-                if pattern in i:
-                    ans += 1
-            print(ans)
-
-
 class KarpRabin:
     big_primes = [16777619]
     maxInt = 1 << 32
@@ -93,5 +72,4 @@ def solve2():
             print(ans)
 
 
-# solve1()
 solve2()
