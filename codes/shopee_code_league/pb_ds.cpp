@@ -19,7 +19,7 @@ struct node {
   }
 };
 
-typedef tree<node, null_type, less<>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;
+typedef tree<node, null_type, less<>, rb_tree_tag, tree_order_statistics_node_update> ordered_set; // 允许重复
 
 int tim = 0;
 
