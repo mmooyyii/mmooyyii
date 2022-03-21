@@ -32,10 +32,10 @@ for x, y in people:
 wifi_1.sort()
 wifi_2.sort()
 
-# # 1. 如果2个圆没有交集 二分查找,结果相加
-# # 2. 如果2个圆有交集, 找出交集的点数(树套树, cdq分治,KD树, 离线查询) https://www.luogu.com.cn/problem/P3810
-# # 3. 如果1个圆被完全覆盖 二分查找,结果相减
-# # 其实只有一种情况, 即 wifi1数量 + wifi2数量 - 2 * (重叠区域数量)
+# 1. 如果2个圆没有交集 二分查找,结果相加
+# 2. 如果2个圆有交集, 找出交集的点数(树套树, cdq分治, KD树, 离线查询) https://www.luogu.com.cn/problem/P3810
+# 3. 如果1个圆被完全覆盖 二分查找,结果相减
+# 其实只有一种情况, 即 wifi1数量 + wifi2数量 - 2 * 重叠区域数量
 question = []
 answer = {}
 for _ in range(cin_int()):
