@@ -16,17 +16,25 @@ def cin_int():
 
 # https://codeforces.com/blog/entry/87287
 
-n, k = cin_int_ls()
-ls = cin_int_ls()
-ls = [i - k for i in ls]
+def solve1():
+    n, k = cin_int_ls()
+    ls = cin_int_ls()
+    ls = [i - k for i in ls]
 
-ans = 0
-pre = [0]
-for i in ls:
-    pre.append(pre[-1] + i)
-sl = SortedList()
-sl.add(0)
-for i in pre[1:]:
-    ans += sl.bisect_right(i)
-    sl.add(i)
-print(ans)
+    ans = 0
+    pre = [0]
+    for i in ls:
+        pre.append(pre[-1] + i)
+    sl = SortedList()
+    sl.add(0)
+    for i in pre[1:]:
+        ans += sl.bisect_right(i)
+        sl.add(i)
+    print(ans)
+
+
+def solve2():
+    n, k = cin_int_ls()
+    ls = cin_int_ls()
+    ls = [i - k for i in ls]
+

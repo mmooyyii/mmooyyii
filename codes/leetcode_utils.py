@@ -367,71 +367,69 @@ def floyd(n, g: dict):
     return ret
 
 
-def dijkstra2(start, g):
+def dijkstra(start, g):
     import heapq
-    vis = {}
+    from collections import defaultdict
     heap = [(0, start)]
-    vis[start] = 0
-    ret = {}
+    ans = defaultdict(lambda: int(1e18))
+    ans[start] = 0
     while heap:
         dist, node = heapq.heappop(heap)
-        ret.setdefault(node, float('inf'))
-        ret[node] = min(ret[node], dist)
-        for n, weight in g[node].items():
-            if n not in vis or (n in vis and vis[n] > dist + weight):
-                vis[n] = dist + weight
-                heapq.heappush(heap, (dist + weight, n))
-    return ret
-
-
-def dijkstra(start, end, g):
-    import heapq
-    vis = {}
-    heap = [(0, start)]
-    vis[start] = 0
-    while heap:
-        dist, node = heapq.heappop(heap)
-        if node == end:
-            return dist
-        if vis[node] < dist:
+        if ans[node] != dist:
             continue
-        for n, weight in g[node].items():
-            if n not in vis or (n in vis and vis[n] > dist + weight):
-                vis[n] = dist + weight
-                heapq.heappush(heap, (dist + weight, n))
-    return -1
+        for nxt, weight in g[node].items():
+            if ans[nxt] > ans[node] + weight:
+                ans[nxt] = ans[node] + weight
+                heapq.heappush(heap, (dist + weight, nxt))
+    return ans
 
 
-class KarpRabin:
+class RabinKarp:
+    mod = 67280421310721
     big_primes = [16777619]
-    maxInt = 1 << 32
     to_int = ord
+    # big_primes = [10]
+    # to_int = int
+    ex_gcd = []
+    for i in big_primes:
+        ex_gcd.append(pow(i, mod - 2, mod))
 
     def __init__(self):
         from collections import deque
-        self.hash = [0 for _ in KarpRabin.big_primes]
+        self.hash = [0 for _ in RabinKarp.big_primes]
         self.string = deque()
 
     def append(self, char):
-        for i in range(len(KarpRabin.big_primes)):
-            self.hash[i] = ((self.hash[i] * KarpRabin.big_primes[i]) + KarpRabin.to_int(char)) % KarpRabin.maxInt
+        for i in range(len(RabinKarp.big_primes)):
+            self.hash[i] = ((self.hash[i] * RabinKarp.big_primes[i]) + RabinKarp.to_int(char)) % RabinKarp.mod
         self.string.append(char)
         return self
 
-    def extend(self, string):
-        for char in string:
-            self.append(char)
+    def appendleft(self, char):
+        for i in range(len(RabinKarp.big_primes)):
+            self.hash[i] += pow(RabinKarp.big_primes[i], len(self.string), RabinKarp.mod) * RabinKarp.to_int(char)
+            self.hash[i] %= RabinKarp.mod
+        self.string.appendleft(char)
+        return self
+
+    def pop(self):
+        char = self.string.pop()
+        for i in range(len(RabinKarp.big_primes)):
+            self.hash[i] = ((self.hash[i] - RabinKarp.to_int(char)) * RabinKarp.ex_gcd[i]) % RabinKarp.mod
         return self
 
     def popleft(self):
         char = self.string.popleft()
-        for i in range(len(KarpRabin.big_primes)):
-            self.hash[i] -= pow(KarpRabin.big_primes[i], len(self.string), KarpRabin.maxInt) * KarpRabin.to_int(char)
-            self.hash[i] %= KarpRabin.maxInt
+        for i in range(len(RabinKarp.big_primes)):
+            self.hash[i] -= pow(RabinKarp.big_primes[i], len(self.string), RabinKarp.mod) * RabinKarp.to_int(char)
+            self.hash[i] %= RabinKarp.mod
         return self
 
     def hash_value(self):
         return tuple(self.hash)
+
+    def __repr__(self):
+        return str({"string": ''.join(self.string), "hash": self.hash_value()})
 
 
 # python 的 str() in str() 也是O(n)
