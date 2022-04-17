@@ -27,13 +27,11 @@ ax === 1 (mod b)
 ax === a**(b-1) (mod b)
 x === a**(b-2) (mod b)
 x = pow(a,b-2,b)
+
+# B个里挑A个，不管顺序有几种情况
+# 备注：递推公式：c(a,b) = c(a-1,b-1) + c(a,b-1)
 """
-
 import random
-from sys import setrecursionlimit
-
-MOD = 1_000_000_007
-setrecursionlimit(int(1e9))
 
 
 def ex_gcd(a, b):
@@ -43,20 +41,8 @@ def ex_gcd(a, b):
 b = 7249017203 * 129301832
 a = 7249017203
 p = int(1e9) + 7
-
 a1 = ex_gcd(a, p)
-
 print((b // a) % p, (b * a1) % p)
-
-
-def is_palindrome(n):
-    n = str(n)
-    for i in range(len(n) // 2):
-        if i > len(n) // 2:
-            return True
-        if n[i] != n[len(n) - 1 - i]:
-            return False
-    return True
 
 
 def next_palindrome(x):
@@ -108,17 +94,6 @@ def binary_closest(target, ls):
     return ls[n - 1]
 
 
-# B个里挑A个，不管顺序有几种情况
-# 备注：递推公式：c(a,b) = c(a-1,b-1) + c(a,b-1)
-def c(a, b):
-    b = min(b, a - b)
-    d, m = 1, 1
-    for i in range(b):
-        d *= i + 1
-        m *= a - i
-    return m // d
-
-
 # 排列组合
 def comb(elements, n):
     import itertools
@@ -147,208 +122,6 @@ class Trie:
         for i in word:
             node = node.setdefault(i, {})
         return node.setdefault('is_word', False)
-
-
-class SkipListNode:
-
-    def __init__(self, k=float('-inf')):
-        self.k = k
-        self.next = None
-        self.down = None
-
-
-class SkipList:
-    """
-    There are 4 kind of SkipListNode
-
-    1) [next] # first node in every layer
-    2) [k,next] # mid node without down pointer
-    3) [k,next,down] # mid node with down pointer
-    4) [k,next,v] # leaf node
-
-    table example
-    Layer1: root->          2
-                            |
-    Layer2: root->          2 -> 3
-                            |    |
-    Layer3: root->          2 -> 3     ->       6
-                            |    |              |
-    Layer4: root->0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
-    """
-
-    def __init__(self):
-        self.high = 1
-        self.root = SkipListNode()
-        self.kv = {}
-
-    def add(self, score, member):
-        if member in self.kv:
-            self.remove(member)
-        d = self.depth()
-        if d > self.high:
-            self._extend_layer(d)
-        node = self.root
-        pre_new_node = None
-        for depth in range(self.high, 0, -1):
-            node = self.search_in_layer(node, score)
-            if d >= depth:
-                new_node = SkipListNode(score)
-                new_node.next = node.next
-                node.next = new_node
-                if pre_new_node:
-                    pre_new_node.down = new_node
-                pre_new_node = new_node
-            node = node.down
-        self.kv[member] = score
-
-    @staticmethod
-    def search_in_layer(node, k):
-        while node.next:
-            if node.k <= k <= node.next.k:
-                return node
-            else:
-                node = node.next
-        return node
-
-    def _extend_layer(self, d):
-        root = self.root
-        new_root = None
-        pre_layer_head = None
-        for _ in range(d - self.high):
-            layer_head = SkipListNode()
-            if not new_root:
-                new_root = layer_head
-            if pre_layer_head:
-                pre_layer_head.down = layer_head
-            pre_layer_head = layer_head
-        if pre_layer_head:
-            pre_layer_head.down = root
-        if new_root:
-            self.root = new_root
-        self.high = max(self.high, d)
-
-    def remove(self, k):
-        if k in self:
-            self.kv.pop(k)
-
-    @staticmethod
-    def depth():
-        d = 1
-        while True:
-            if random.random() > 0.5:
-                return d
-            else:
-                d += 1
-
-    def show(self):
-        head = self.root
-        while head:
-            node = head.next
-            head = head.down
-            print("Layer: root->", end='')
-            while node:
-                if node.next:
-                    print(node.k, end=' -> ')
-                else:
-                    print(node.k, end='')
-                node = node.next
-            print()
-
-
-# copy from https://github.com/keon/algorithms/blob/master/algorithms/tree/segment_tree/segment_tree.py
-class SegmentTreeOrder:
-    def __init__(self, arr, function):
-        self.segment = [0 for x in range(3 * len(arr) + 3)]
-        self.arr = arr
-        self.fn = function
-        self.make_tree(0, 0, len(arr) - 1)
-
-    def make_tree(self, i, l, r):
-        if l == r:
-            self.segment[i] = self.arr[l]
-        elif l < r:
-            self.make_tree(2 * i + 1, l, int((l + r) / 2))
-            self.make_tree(2 * i + 2, int((l + r) / 2) + 1, r)
-            self.segment[i] = self.fn(self.segment[2 * i + 1], self.segment[2 * i + 2])
-
-    def __query(self, i, L, R, l, r):
-        if l > R or r < L or L > R or l > r:
-            return None
-        if L >= l and R <= r:
-            return self.segment[i]
-        val1 = self.__query(2 * i + 1, L, int((L + R) / 2), l, r)
-        val2 = self.__query(2 * i + 2, int((L + R + 2) / 2), R, l, r)
-        if val1 is not None:
-            if val2 is not None:
-                return self.fn(val1, val2)
-            return val1
-        return val2
-
-    def query(self, l, r):
-        return self.__query(0, 0, len(self.arr) - 1, l, r)
-
-
-class SegmentTree:
-
-    def __init__(self, ls, calc=lambda x, y: x + y):
-        def f(a, b):
-            if a is None:
-                return b
-            elif b is None:
-                return a
-            else:
-                return calc(a, b)
-
-        self.data = ls
-        self.calc = f
-        self.tree = [0 for _ in range(len(ls) * 4)]
-        for i, v in enumerate(ls):
-            self.tree[i + len(self.data)] = v
-        for i in range(len(ls) - 1, 0, -1):
-            self.tree[i] = self.calc(self.tree[i * 2], self.tree[i * 2 + 1])
-
-    def __setitem__(self, key, value):
-        self.data[key] = value
-        pos = key + len(self.data)
-        self.tree[pos] = value
-        while pos:
-            left, right = pos, pos
-            if pos & 1:
-                left = pos - 1
-            else:
-                right = pos + 1
-            pos >>= 1
-            self.tree[pos] = self.calc(self.tree[left], self.tree[right])
-
-    def range(self, left, right):  # 左右都能取到
-        rt = None
-        left += len(self.data)
-        right += len(self.data)
-        while left <= right:
-            if left & 1:
-                rt = self.calc(rt, self.tree[left])
-                left += 1
-            if not right & 1:
-                rt = self.calc(rt, self.tree[right])
-                right -= 1
-            left >>= 1
-            right >>= 1
-        return rt
-
-
-def init_digraph(n, edges):
-    g = {i: {} for i in range(n)}
-    for a, b in edges:
-        g[a][b] = 1
-    return g
-
-
-def init_graph(n, edges):
-    g = {i: {} for i in range(n)}
-    for a, b in edges:
-        g[a][b] = 1
-        g[b][a] = 1
-    return g
 
 
 # 任意2点间的距离
@@ -385,11 +158,15 @@ def dijkstra(start, g):
 
 
 class RabinKarp:
+    DEBUG = False
     mod = 67280421310721  # int(1e9)+7
-    big_primes = [16777619]
-    to_int = ord
-    # big_primes = [10]
-    # to_int = int
+    if DEBUG:
+        big_primes = [10]
+        to_int = int
+    else:
+        big_primes = [16777619]
+        to_int = ord
+
     ex_gcd = []
     for i in big_primes:
         ex_gcd.append(pow(i, mod - 2, mod))
@@ -432,72 +209,7 @@ class RabinKarp:
         return str({"string": ''.join(self.string), "hash": self.hash_value()})
 
 
-# python 的 str() in str() 也是O(n)
-def boyer_moore(pattern, text):
-    bad_skip = {}
-    good_skip = 0
-    for i, v in enumerate(pattern):
-        bad_skip[v] = i
-    while True:
-        if pattern[good_skip] == pattern[-good_skip - 1]:
-            good_skip += 1
-        else:
-            break
-    index = 0
-    while index + len(pattern) <= len(text):
-        search = len(pattern)
-        while True:
-            search -= 1
-            if pattern[search] != text[index + search]:
-                suffix_length = len(pattern) - 1 - search
-                if text[index + search] in bad_skip:
-                    bad = len(pattern) - bad_skip[text[index + search]] - 1
-                else:
-                    bad = len(pattern) - suffix_length
-                if 0 < suffix_length <= good_skip:
-                    good = len(pattern) - suffix_length
-                elif suffix_length > good_skip:
-                    good = len(pattern) - good_skip
-                else:
-                    good = 0
-                break
-            if search == 0:
-                print(index)
-                return True
-        index += max(bad, good)
-    return False
-
-
-def miller_rabin(p):
-    """
-    费马小定理
-    若 p 为素数 gcd(a,p)==1，则 a^(p-1) === 1 mod p
-    另一个形式：对于任意整数 a ，有 a^p === a (mod p)
-    """
-    if p < 3:
-        return p == 2
-    for _ in range(8):
-        if pow(random.randint(2, p - 1), p - 1, p) != 1:
-            return False
-    return True
-
-
-def prime(n):
-    memo = [1 for _ in range(n)]
-    ret = []
-    for i in range(2, n):
-        if memo[i]:
-            ret.append(i)
-        j = 0
-        while j < len(ret) and i * ret[j] < n:
-            memo[i * ret[j]] = False
-            if i % ret[j] == 0:
-                break
-            j += 1
-    return ret
-
-
-class SpiltPrime:
+class Prime:
 
     def __init__(self, max_value):
         self.primes = self.prime(int(max_value ** 0.5) + 1)
@@ -515,6 +227,19 @@ class SpiltPrime:
                     break
                 j += 1
         return ret
+
+    def miller_rabin(self, p):
+        """
+        费马小定理
+        若 p 为素数 gcd(a,p)==1，则 a^(p-1) === 1 mod p
+        另一个形式：对于任意整数 a ，有 a^p === a (mod p)
+        """
+        if p < 3:
+            return p == 2
+        for _ in range(8):
+            if pow(random.randint(2, p - 1), p - 1, p) != 1:
+                return False
+        return True
 
     # 因式分解
     def split(self, n):
@@ -577,17 +302,6 @@ def bucket_sort(ls):
     return ret
 
 
-from functools import lru_cache
-
-
-@lru_cache(None)
-def dp():
-    return 0
-
-
-dp.cache_clear()
-
-
 #  字典顺的下一个
 def next_permutation(nums):
     if len(nums) <= 1:
@@ -632,47 +346,12 @@ def single_stack(ls):
     return ret
 
 
-# 大鸟转转转
-def roll_roll_roll(matrix, n, depth):
-    maxx, maxy = len(matrix) - 1 - depth, len(matrix[0]) - 1 - depth
-
-    def nxt(x, y):
-        if y == depth and depth <= x < maxx:
-            return x + 1, y
-        if x == maxx and depth <= y < maxy:
-            return x, y + 1
-        if y == maxy and depth < x <= maxx:
-            return x - 1, y
-        if x == depth and depth < y <= maxy:
-            return x, y - 1
-        return x, y
-
-    x, y = depth, depth
-    tmp = []
-    while True:
-        tmp.append(matrix[x][y])
-        x, y = nxt(x, y)
-        if (x, y) == (depth, depth):
-            break
-    n %= len(tmp)
-    # n = len(tmp) - n # 逆时针或顺时针
-    tmp = tmp[n:] + tmp[:n]
-    x, y = depth, depth
-    print(tmp)
-    for i in tmp:
-        matrix[x][y] = i
-        x, y = nxt(x, y)
-    for row in matrix:
-        print(row)
-
-
 def hungary(girls_expect, boys, girls):
     """
     graph: {girl1: {boy1,boy2....}}
     boys: the number of boys
     girls: the number of girls
     """
-
     boys_expect = {i: set() for i in range(boys)}
     for girl, boysList in girls_expect.items():
         for boy in boysList:
@@ -757,12 +436,7 @@ def dot(matrix1, matrix2):
         for y in range(len(ans[0])):
             for i in range(len(matrix1[0])):
                 ans[x][y] += matrix1[x][i] * matrix2[i][y]
-
     return ans
-
-
-p = [[0, 1], [1, 1]]
-a = [[1, 1]]
 
 
 def q_pow(matrix, b):
@@ -792,37 +466,6 @@ def quick(n):
         ans += (r - l + 1) * (n // l)
         l = r + 1
     return ans
-
-
-class SegmentSum:
-
-    def __init__(self, ls):
-        start = 0
-        self.pre = [0]
-        for i in ls:
-            start += i
-            self.pre.append(start)
-
-    def range(self, l, r):
-        return self.pre[r] - self.pre[l]
-
-
-class TreeNode:
-    def __init__(self, x):
-        self.val = x
-        self.left = None
-        self.right = None
-
-
-def makeLeetCodeBinaryTree(data):
-    data = [TreeNode(i) if i else None for i in data]
-    root = data[0]
-    for i, v in enumerate(data):
-        if i * 2 + 1 < len(data):
-            v.left = data[i * 2 + 1]
-        if i * 2 + 2 < len(data):
-            v.right = data[i * 2 + 2]
-    return root
 
 
 def topo_sort(g: dict):
@@ -1211,8 +854,76 @@ class KM:
         return self.match
 
 
+from functools import reduce
+
+
+class Partition:
+
+    def __init__(self, ls, merge=max):
+        if len(ls) == 0:
+            raise ValueError
+        self.merge = merge
+        self.ls = ls
+        self.size = int(len(ls) ** 0.5)
+        self.partition = []
+        for i in range(0, len(ls), self.size):
+            self.partition.append(reduce(merge, ls[i:i + self.size]))
+
+    def __setitem__(self, key, value):
+        self.ls[key] = value
+        i = key // self.size
+        l = i * self.size
+        self.partition[i] = reduce(self.merge, self.ls[l:l + self.size])
+
+    def query(self, l, r):
+        l_part = l // self.size
+        r_part = r // self.size
+        i = l_part * self.size
+        if l_part == r_part:
+            return reduce(self.merge, self.ls[l:r + 1])
+        ans = []
+        if l < i + self.size:
+            ll = reduce(self.merge, self.ls[l:i + self.size])
+            ans.append(ll)
+        for i in range(l_part + 1, r_part):
+            ans.append(self.partition[i])
+        i = r_part * self.size
+        if i < r + 1:
+            rr = reduce(self.merge, self.ls[i:r + 1])
+            ans.append(rr)
+        return reduce(self.merge, ans)
+
+
 class Node:
 
     def __init__(self, val):
         self.val = val
         self.nxt = set()
+
+
+class ChaFenList:
+    """
+    差分数组
+    我的评价是: 不如线段树
+    """
+
+    def __init__(self, ls):
+        self.sub = []
+        for i in range(0, len(ls)):
+            if i == 0:
+                self.sub.append(ls[i])
+            else:
+                self.sub.append(ls[i] - ls[i - 1])
+
+    def add(self, l, r, v):
+        self.sub[l] += v
+        if r < len(self.sub):
+            self.sub[r] -= v
+
+    def parse(self):
+        ans = []
+        cur = 0
+        for i in self.sub:
+            cur += i
+            ans.append(cur)
+        return ans
