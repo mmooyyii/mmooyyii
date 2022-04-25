@@ -1216,3 +1216,39 @@ class Node:
     def __init__(self, val):
         self.val = val
         self.nxt = set()
+
+
+class Fenwick:
+
+    def __init__(self, n):
+        self.a = n
+        self.n = len(self.a)
+        for i in range(1, self.n + 1):
+            j = i + (i & -i)
+            if j <= self.n:
+                self.a[j - 1] += self.a[i - 1]
+
+    def __len__(self):
+        return self.n
+
+    def range_sum(self, i, j):
+        res = 0
+        while j > i:
+            res += self.a[j - 1]
+            j &= j - 1
+        while i > j:
+            res -= self.a[i - 1]
+            i &= i - 1
+        return res
+
+    def __getitem__(self, i):
+        return self.range_sum(i, i + 1)
+
+    def add(self, i, k):
+        i += 1
+        while i <= self.n:
+            self.a[i - 1] += k
+            i += i & -i
+
+    def __setitem__(self, i, value):
+        self.add(i, value - self[i])
