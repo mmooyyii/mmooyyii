@@ -33,8 +33,3 @@ def solve1():
     print(ans)
 
 
-def solve2():
-    n, k = cin_int_ls()
-    ls = cin_int_ls()
-    ls = [i - k for i in ls]
-
