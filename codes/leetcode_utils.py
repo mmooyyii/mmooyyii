@@ -959,3 +959,83 @@ class Fenwick:
 
     def __setitem__(self, i, value):
         self.add(i, value - self[i])
+
+
+v = 0
+mul = 1
+add = 2
+
+
+class SegmentTree:
+
+    def __init__(self, ls):
+        self.a = [0] + ls
+        self.n = len(ls)
+        self.st = [[0, 0, 0] for _ in range(len(self.a) * 4 + 7)]
+        self._build()
+
+    def _build(self, root=1, l=1, r=None):
+        r = r or self.n
+        self.st[root][mul] = 1
+        self.st[root][add] = 0
+        if l == r:
+            self.st[root][v] = self.a[l]
+        else:
+            m = (l + r) // 2
+            self._build(root * 2, l, m)
+            self._build(root * 2 + 1, m + 1, r)
+            self.st[root][v] = self.st[root * 2][v] + self.st[root * 2 + 1][v]
+
+    def push_down(self, root, l, r):
+        st = self.st
+        m = (l + r) // 2
+        st[root * 2][v] = (st[root * 2][v] * st[root][mul] + st[root][add] * (m - l + 1))
+        st[root * 2 + 1][v] = (st[root * 2 + 1][v] * st[root][mul] + st[root][add] * (r - m))
+        st[root * 2][mul] = (st[root * 2][mul] * st[root][mul])
+        st[root * 2 + 1][mul] = (st[root * 2 + 1][mul] * st[root][mul])
+        st[root * 2][add] = (st[root * 2][add] * st[root][mul] + st[root][add])
+        st[root * 2 + 1][add] = (st[root * 2 + 1][add] * st[root][mul] + st[root][add])
+        st[root][mul] = 1
+        st[root][add] = 0
+
+    def mul(self, l, r, k, root=1, stdl=1, stdr=None):
+        stdr = stdr or self.n
+        st = self.st
+        if r < stdl or stdr < l:
+            return
+        if l <= stdl and stdr <= r:
+            st[root][v] = st[root][v] * k
+            st[root][mul] = st[root][mul] * k
+            st[root][add] = st[root][add] * k
+            return
+        self.push_down(root, stdl, stdr)
+        m = (stdl + stdr) // 2
+        self.mul(l, r, k, root * 2, stdl, m)
+        self.mul(l, r, k, root * 2 + 1, m + 1, stdr)
+        st[root][v] = st[root * 2][v] + st[root * 2 + 1][v]
+
+    def add(self, l, r, k, root=1, stdl=1, stdr=None):
+        stdr = stdr or self.n
+        st = self.st
+        if r < stdl or stdr < l:
+            return
+        if l <= stdl and stdr <= r:
+            st[root][add] = (st[root][add] + k)
+            st[root][v] = (st[root][v] + k * (stdr - stdl + 1))
+            return
+        self.push_down(root, stdl, stdr)
+        m = (stdl + stdr) // 2
+        self.add(l, r, k, root * 2, stdl, m)
+        self.add(l, r, k, root * 2 + 1, m + 1, stdr)
+        st[root][v] = (st[root * 2][v] + st[root * 2 + 1][v])
+
+    def sum(self, l, r, root=1, stdl=1, stdr=None):
+        stdr = stdr or self.n
+        st = self.st
+        if r < stdl or stdr < l:
+            return 0
+        if l <= stdl and stdr <= r:
+            return st[root][v]
+        self.push_down(root, stdl, stdr)
+        m = (stdl + stdr) // 2
+        return self.sum(l, r, root * 2, stdl, m) + self.sum(l, r, root * 2 + 1, m + 1, stdr)
