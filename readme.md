@@ -21,6 +21,7 @@
     - [麻将向听数与简易bot](docs/mahjong/向听数.md)
     - [利用泰勒展开式写配置文件](docs/algorithm/taylor.md)
     - [LeetCode常用函数](codes/leetcode_utils.py)
+    - [尝试一下AVX2指令集](docs/cpp/avx2.md)
 - 操作系统/网络:
     - [对长连接服务热更新](codes/share_socket)
     - [一天学一个syscall](docs/os/syscall.md)
