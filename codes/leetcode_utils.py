@@ -1039,3 +1039,32 @@ class SegmentTree:
         self.push_down(root, stdl, stdr)
         m = (stdl + stdr) // 2
         return self.sum(l, r, root * 2, stdl, m) + self.sum(l, r, root * 2 + 1, m + 1, stdr)
+    
+def imos(n, m, matrix):
+    ans = [[0] * (m * 2) for _ in range(n * 2)]
+    for a, b, c, d in matrix:
+        ans[a][b] += 1
+        ans[a][d + 1] -= 1
+        ans[c + 1][b] -= 1
+        ans[c + 1][d + 1] += 1
+
+    for row in range(n):
+        for col in range(m):
+            ans[row][col] += ans[row][col - 1]
+    for col in range(m):
+        for row in range(n):
+            ans[row][col] += ans[row - 1][col]
+
+    for row in ans[:n]:
+        print(row[:m])
+
+    return ans
+
+
+# imos(6, 6, [[0, 0, 3, 3], [3, 1, 4, 2], [2, 2, 5, 5]])
+# [1, 1, 1, 1, 0, 0]
+# [1, 1, 1, 1, 0, 0]
+# [1, 1, 2, 2, 1, 1]
+# [1, 2, 3, 2, 1, 1]
+# [0, 1, 2, 1, 1, 1]
+# [0, 0, 1, 1, 1, 1]
